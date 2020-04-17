@@ -25,6 +25,7 @@ class Piece extends THREE.Object3D {
     }
     this.loader = new THREE.OBJLoader();
     this.piece = new THREE.Object3D();
+    this.mesh;
     this.loadPiece(name, this.material);
   }
 
@@ -36,6 +37,8 @@ class Piece extends THREE.Object3D {
         obj.traverse(function (child) {
           if (child instanceof THREE.Mesh) {
             child.material = material;
+            child.userData = that;
+            that.mesh = child;
           }
         });
         that.piece = obj;
@@ -44,16 +47,12 @@ class Piece extends THREE.Object3D {
         MyScene.pieceLoaded();
       },
       function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + "% loaded")
+        //console.log((xhr.loaded / xhr.total * 100) + "% loaded")
       },
       function (err) {
         console.error("Error loading model")
       }
     );
-  }
-
-  onClick() {
-    window.alert("Don't implement method onClick() on " + this.name + " of " + this.team + " team.");
   }
 
   move(section) {
@@ -73,12 +72,12 @@ class Piece extends THREE.Object3D {
   }
 
   select() {
-    this.piece.material = this.selectedMaterial;
+    this.mesh.material = this.selectedMaterial;
     this.isSelected = true;
   }
 
   unselect() {
-    this.piece.material = this.material;
+    this.mesh.material = this.material;
     this.isSelected = false;
   }
 

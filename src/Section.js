@@ -15,6 +15,8 @@ class Section extends THREE.Object3D {
         this.section.position.x = posX * this.size;
         this.section.position.z = - (posZ * this.size);
 
+        this.section.userData = this;
+
         this.add(this.section);
     }
 

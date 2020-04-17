@@ -1,47 +1,24 @@
- 
-/// La clase fachada del modelo
-/**
- * Usaremos una clase derivada de la clase Scene de Three.js para llevar el control de la escena y de todo lo que ocurre en ella.
- */
-
 class MyScene extends THREE.Scene {
   constructor (myCanvas) {
     super();    
-    // Lo primero, crear el visualizador, pasándole el lienzo sobre el que realizar los renderizados.
-    this.renderer = this.createRenderer(myCanvas);
-    
-    // Se añade a la gui los controles para manipular los elementos de esta clase
-    this.gui = this.createGUI ();
-    
-    // Construimos los distinos elementos que tendremos en la escena
-    
-    // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
-    // Tras crear cada elemento se añadirá a la escena con   this.add(variable)
+    this.renderer = this.createRenderer(myCanvas);   
+    this.gui = this.createGUI ();        
     this.createLights ();
-    
-    // Tendremos una cámara con un control de movimiento con el ratón
     this.createCamera ();
-    
-    // Un suelo 
-    //this.createGround ();
-    
-    // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
-    this.axis = new THREE.AxesHelper (5);
-    this.add (this.axis);
-
     this.lastTime = Date.now();
-
     this.tableboard = new Tableboard();
     this.add(this.tableboard);
+    this.gameMode = new GameMode(this.tableboard, this.camera);
   }
 
   static pieceLoaded() {
-    if (typeof MyScene.totalPices == 'undefined') {
-      MyScene.totalPices = 32;
+    if (typeof MyScene.totalPieces == 'undefined') {
+      MyScene.totalPieces = 32;
       MyScene.ready = false;
     }
-    MyScene.totalPices--;
-    if (MyScene.totalPices <= 0) {
+
+    MyScene.totalPieces--;
+    if (MyScene.totalPieces <= 0) {
       window.alert("Todo cargado. Puede empezar a jugar");
       MyScene.ready = true;
       this.lastTime = Date.now();
@@ -60,27 +37,6 @@ class MyScene extends THREE.Scene {
     var look = new THREE.Vector3 (0,0,0);
     this.camera.lookAt(look);
     this.add (this.camera);
-  }
-  
-  createGround () {
-    // El suelo es un Mesh, necesita una geometría y un material.
-    
-    // La geometría es una caja con muy poca altura
-    var geometryGround = new THREE.BoxGeometry (50,0.2,50);
-    
-    // El material se hará con una textura de madera
-    var texture = new THREE.TextureLoader().load('../imgs/wood.jpg');
-    var materialGround = new THREE.MeshPhongMaterial ({map: texture});
-    
-    // Ya se puede construir el Mesh
-    var ground = new THREE.Mesh (geometryGround, materialGround);
-    
-    // Todas las figuras se crean centradas en el origen.
-    // El suelo lo bajamos la mitad de su altura para que el origen del mundo se quede en su lado superior
-    ground.position.y = -0.1;
-    
-    // Que no se nos olvide añadirlo a la escena, que en este caso es  this
-    this.add (ground);
   }
   
   createGUI () {
@@ -122,7 +78,7 @@ class MyScene extends THREE.Scene {
     // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
     this.spotLight = new THREE.SpotLight( 0xffffff, this.guiControls.lightIntensity );
-    this.spotLight.position.set( 60, 60, 40 );
+    this.spotLight.position.set( 0, 100, 0 );
     this.add (this.spotLight);
   }
   
@@ -178,13 +134,6 @@ class MyScene extends THREE.Scene {
     // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
     requestAnimationFrame(() => this.update())
 
-    // Se actualizan los elementos de la escena para cada frame
-    // Se actualiza la intensidad de la luz con lo que haya indicado el usuario en la gui
-    this.spotLight.intensity = this.guiControls.lightIntensity;
-    
-    // Se muestran o no los ejes según lo que idique la GUI
-    this.axis.visible = this.guiControls.axisOnOff;
-    
     if(MyScene.ready) {
       this.tableboard.update(deltaTime);
     }
@@ -193,6 +142,8 @@ class MyScene extends THREE.Scene {
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
   }
+
+
 }
 
 /// La función   main

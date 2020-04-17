@@ -7,14 +7,15 @@ class Tableboard extends THREE.Object3D {
         this.rotateSpeed = 60;
         this.boardSize = 8;
         this.sections = [];
-        this.whiteTeam = new Array(16);
-        this.blackTeam = new Array(16);
+        this.whiteTeam = new Array();
+        this.blackTeam = new Array();
         this.board = new THREE.Object3D();
 
         this.createBoard();
         this.addPieces();
         this.board.position.x = -(this.boardSize / 2 * this.sections[0][0].size - this.sections[0][0].size / 2);
         this.board.position.z = this.boardSize / 2 * this.sections[0][0].size - this.sections[0][0].size / 2;
+        
         this.add(this.board);
     }
 
@@ -40,33 +41,35 @@ class Tableboard extends THREE.Object3D {
     }
 
     addPieces() {
-        this.addTeam(this.whiteTeam, teams.WHITE);
-        this.addTeam(this.blackTeam, teams.BLACK);
-    }
+        this.whiteTeam.push(new Rook(teams.WHITE, this.sections[0][0]));  
+        this.blackTeam.push(new Rook(teams.BLACK, this.sections[0][7]));  
+        this.whiteTeam.push(new Knight(teams.WHITE, this.sections[1][0]));
+        this.blackTeam.push(new Knight(teams.BLACK, this.sections[1][7]));
+        this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[2][0]));
+        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7]));
+        this.whiteTeam.push(new King(teams.WHITE, this.sections[3][0]));  
+        this.blackTeam.push(new King(teams.BLACK, this.sections[3][7]));  
+        this.whiteTeam.push(new Queen(teams.WHITE, this.sections[4][0])); 
+        this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7])); 
+        this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[5][0]));
+        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[5][7]));
+        this.whiteTeam.push(new Knight(teams.WHITE, this.sections[6][0]));
+        this.blackTeam.push(new Knight(teams.BLACK, this.sections[6][7]));
+        this.whiteTeam.push(new Rook(teams.WHITE, this.sections[7][0]));  
+        this.blackTeam.push(new Rook(teams.BLACK, this.sections[7][7]));  
 
-    addTeam(team, teamColor) {
-        var pos = 0;
-        var pawnPos = 1;
-        if (teamColor === teams.BLACK) {
-            pos = 7;
-            pawnPos = 6;
-        }
-
-        team.push(new Rook(teamColor, this.sections[0][pos]));
-        team.push(new Knight(teamColor, this.sections[1][pos]));
-        team.push(new Bishop(teamColor, this.sections[2][pos]));
-        team.push(new King(teamColor, this.sections[3][pos]));
-        team.push(new Queen(teamColor, this.sections[4][pos]));
-        team.push(new Bishop(teamColor, this.sections[5][pos]));
-        team.push(new Knight(teamColor, this.sections[6][pos]));
-        team.push(new Rook(teamColor, this.sections[7][pos]));
         for (var i = 0; i < this.boardSize; i++) {
-            team.push(new Pawn(teamColor, this.sections[i][pawnPos]));
+            this.whiteTeam.push(new Pawn(teams.WHITE, this.sections[i][1]));
+            this.blackTeam.push(new Pawn(teams.BLACK, this.sections[i][6]));
         }
-        for (var i = 0; i < team.length; i++) {
-            this.board.add(team[i]);
+
+        for (var i = 0; i < this.whiteTeam.length; i++) {
+            this.board.add(this.whiteTeam[i]);
+            this.board.add(this.blackTeam[i]);
         }
     }
+
+    
 
     selectSection(posX, posZ) {
         if (posX < this.boardSize && posZ < this.boardSize
