@@ -6,6 +6,9 @@ class GameMode {
         this.pickableObjects = new Array();
         this.currentTurn = teams.WHITE;
         this.gameState = GameState.SELECT_PIECE;
+        this.isHelpActive = true;
+        this.currentValidMovements = new Array();
+
         window.addEventListener("mousedown", (event) => this.onMouseDown(event));
     }
     
@@ -36,37 +39,72 @@ class GameMode {
         this.pickableObjects = this.pickableObjects.concat(this.tableboard.blackTeam);
       }
     } else if (this.gameState == GameState.SELECT_MOVEMENT) {
+      this.pickableObjects = this.pickableObjects.concat(this.currentValidMovements);
       if (this.currentTurn == teams.WHITE) {
-        this.pickableObjects = this.pickableObjects.concat(this.tableboard.blackTeam);
-      } else {
         this.pickableObjects = this.pickableObjects.concat(this.tableboard.whiteTeam);
-      }
-      for(var i = 0; i < this.tableboard.boardSize; i++) {
-        this.pickableObjects = this.pickableObjects.concat(this.tableboard.sections[i]);
+      } else {
+        this.pickableObjects = this.pickableObjects.concat(this.tableboard.blackTeam);
       }
     }
   }
 
   executeTurnAction(selectedObject) {
+    this.unmarkSections();
+    this.currentValidMovements = new Array();
+
+    if (this.currentSelected)
+      this.currentSelected.unselect();
+
     if (this.gameState == GameState.SELECT_PIECE) {
       this.currentSelected = selectedObject;
       selectedObject.onClick();
-      //@TODO: Mark valid sections to move
+      this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
+      this.markSections();
       this.gameState = GameState.SELECT_MOVEMENT;
+
     } else if (this.gameState == GameState.SELECT_MOVEMENT) {
       if (selectedObject instanceof Piece) {
+        if (selectedObject.team == this.currentTurn) {
+          this.currentSelected = selectedObject;
+          selectedObject.onClick();
+          this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
+          this.markSections();
+          this.gameState = GameState.SELECT_MOVEMENT;
+        } else {
+          this.currentSelected.unselect();
+          this.tableboard.destroyPiece(selectedObject);
+          this.currentSelected.move(selectedObject.currentSection);
+          this.nextTurn();
+        }
 
-
-        //@TODO: remove sections marked
-        this.currentSelected.unselect();
-        this.nextTurn();
       } else if (selectedObject instanceof Section) {
-        //@TODO: Check if valid movement
         this.currentSelected.move(selectedObject);
-
-        //@TODO: remove sections marked
         this.currentSelected.unselect();
         this.nextTurn();
+      }
+    }
+  }
+
+  markSections() {
+    if (this.isHelpActive) {
+      for(var i = 0; i < this.currentValidMovements.length; i++) {
+        if (this.currentValidMovements[i] instanceof Piece) {
+          this.currentValidMovements[i].select(true);
+        } else {
+          this.currentValidMovements[i].select();
+        }
+      }
+    }
+  }
+
+  unmarkSections() {
+    if (this.isHelpActive) {
+      for(var i = 0; i < this.currentValidMovements.length; i++) {
+        if (this.currentValidMovements[i].currentPiece != null) {
+          this.currentValidMovements[i].currentPiece.unselect(true);
+        } else {
+          this.currentValidMovements[i].unselect();
+        }
       }
     }
   }

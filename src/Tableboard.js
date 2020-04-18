@@ -69,12 +69,38 @@ class Tableboard extends THREE.Object3D {
         }
     }
 
-    
+    getSection(posX, posZ) {
+        if (posX < this.boardSize && posZ < this.boardSize
+            && posX >= 0 && posZ >= 0) {
+            return this.sections[posX][posZ];
+        }
+        return null;
+    }
 
     selectSection(posX, posZ) {
         if (posX < this.boardSize && posZ < this.boardSize
             && posX >= 0 && posZ >= 0) {
             this.sections[posX][posZ].onClick();
+        }
+    }
+
+    destroyPiece(piece) {
+        if (piece) {
+            piece.currentSection.currentPiece = null;
+            piece.parent.remove(piece);
+            if (piece.team == teams.WHITE) {
+                for (var i = 0; i < this.whiteTeam.length; i++) {
+                    if (this.whiteTeam[i] == piece) {
+                        this.whiteTeam.splice(i,1);
+                    }
+                }
+            } else {
+                for (var i = 0; i < this.blackTeam.length; i++) {
+                    if (this.blackTeam[i] == piece) {
+                        this.blackTeam.splice(i,1);
+                    }
+                }
+            }
         }
     }
 

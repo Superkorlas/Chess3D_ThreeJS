@@ -10,7 +10,9 @@ class Piece extends THREE.Object3D {
     this.material;
     this.currentSection = initialSection;
     this.selectedMaterial = new THREE.MeshPhongMaterial({ color: 0x00893F });
+    this.threatenMaterial = new THREE.MeshPhongMaterial({ color: 0xCB3234 });
     this.isSelected = false;
+    this.isMoved = false;
 
     switch (team) {
       case teams.WHITE:
@@ -23,6 +25,7 @@ class Piece extends THREE.Object3D {
         window.alert("Not valid team for " + this.name);
         break;
     }
+
     this.loader = new THREE.OBJLoader();
     this.piece = new THREE.Object3D();
     this.mesh;
@@ -44,6 +47,7 @@ class Piece extends THREE.Object3D {
         that.piece = obj;
         that.add(that.piece);
         that.move(that.currentSection);
+        that.isMoved = false;
         MyScene.pieceLoaded();
       },
       function (xhr) {
@@ -61,24 +65,50 @@ class Piece extends THREE.Object3D {
     this.position.z = section.section.position.z;
     section.currentPiece = this;
     this.currentSection = section;
+    this.isMoved = true;
   }
 
   onClick() {
     if (this.isSelected) {
       this.unselect();
     } else {
-      this.select();
+      this.select(false);
     }
   }
 
-  select() {
-    this.mesh.material = this.selectedMaterial;
+  select(isThreatened) {
+    if (isThreatened) {
+      this.mesh.material = this.threatenMaterial;
+    } else {
+      this.mesh.material = this.selectedMaterial;
+    }
     this.isSelected = true;
   }
 
   unselect() {
     this.mesh.material = this.material;
     this.isSelected = false;
+  }
+
+  getValidMovements(tableboard) {
+    window.alert("Valid movements not define: " + this.name);
+    return new Array();
+  }
+
+  checkSection(section) {
+    var object = null;
+
+    if (section) {
+      if (section.currentPiece != null) {
+        if (section.currentPiece.team != this.team) {
+          object = section.currentPiece;
+        }
+      } else {
+          object = section;
+      }
+    }
+
+    return object;
   }
 
   update() { }

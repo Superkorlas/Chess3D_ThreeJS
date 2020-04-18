@@ -7,6 +7,8 @@ class Section extends THREE.Object3D {
         this.selectedMaterial = new THREE.MeshPhongMaterial({ color: 0x00893F });
         this.isSelected = false;
         this.currentPiece = null;
+        this.posX = posX;
+        this.posZ = posZ;
 
         this.material = new THREE.MeshPhongMaterial({ color: this.color });
         this.geometry = new THREE.BoxGeometry(this.size,1,this.size);
