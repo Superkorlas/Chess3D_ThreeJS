@@ -95,6 +95,23 @@ class Piece extends THREE.Object3D {
     return new Array();
   }
 
+  getNorthWestMovement(tableboard, scope) {
+    var validMovements = new Array();
+    var cont = true;
+  }
+
+  getNorthEastMovement(tableboard, scope) {
+
+  }
+
+  getSouthWestMovement(tableboard, scope) {
+
+  }
+
+  getSouthWestMovement(tableboard, scope) {
+
+  }
+
   checkSection(section) {
     var object = null;
 
@@ -110,6 +127,7 @@ class Piece extends THREE.Object3D {
 
     return object;
   }
+
 
   update() { }
 }
