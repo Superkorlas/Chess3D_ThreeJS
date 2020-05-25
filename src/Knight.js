@@ -26,4 +26,31 @@ class Knight extends Piece {
         }
         return validMovements;
     }
+
+    move(section) {
+        var horizontalAnim = this.horizontalMovementAnim(section, false);
+        var that = this;
+        var height  = { posY : 0 };
+        var target = { posY : 20 };
+
+        var verticalUpAnim = new TWEEN.Tween(height).to(target, 500);
+        verticalUpAnim.easing(TWEEN.Easing.Quadratic.InOut);
+        verticalUpAnim.onUpdate(function() { 
+            that.position.y = height.posY;
+        });
+
+        var height2  = { posY : 20 };
+        var target2 = { posY : 0 };
+        var verticalDownAnim = new TWEEN.Tween(height2).to(target2, 500);
+        verticalDownAnim.easing(TWEEN.Easing.Quadratic.InOut);
+        verticalDownAnim.onUpdate(function() { 
+            that.position.y = height2.posY;
+        });
+
+        verticalUpAnim.chain(horizontalAnim);
+        horizontalAnim.chain(verticalDownAnim);
+        verticalUpAnim.start();
+
+        this.updateSection(section);
+    }
 }

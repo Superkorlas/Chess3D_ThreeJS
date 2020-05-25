@@ -54,18 +54,39 @@ class Piece extends THREE.Object3D {
                 //console.log((xhr.loaded / xhr.total * 100) + "% loaded")
             },
             function (err) {
-                console.error("Error loading model")
+                //console.error("Error loading model")
             }
         );
     }
 
     move(section) {
+        this.horizontalMovementAnim(section);   
+        this.updateSection(section);
+    }
+
+    updateSection(section) {
         this.currentSection.currentPiece = null;
-        this.position.x = section.section.position.x;
-        this.position.z = section.section.position.z;
         section.currentPiece = this;
         this.currentSection = section;
         this.isMoved = true;
+    }
+
+    horizontalMovementAnim(section, shouldStart = true) {
+        var that = this;
+        var currentPos = { posX : that.position.x, posZ : that.position.z };
+        var target = { posX : section.section.position.x, posZ : section.section.position.z };
+        var moveAnim = new TWEEN.Tween(currentPos).to(target, 1000);
+        moveAnim.easing(TWEEN.Easing.Quadratic.InOut);
+        moveAnim.onUpdate(function() { 
+            that.position.x = currentPos.posX;
+            that.position.z = currentPos.posZ;
+        });
+
+        if(shouldStart) {
+            moveAnim.start();
+        } else {
+            return moveAnim;
+        }
     }
 
     onClick() {

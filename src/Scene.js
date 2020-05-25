@@ -136,6 +136,7 @@ class MyScene extends THREE.Scene {
 
     if(MyScene.ready) {
       this.tableboard.update(deltaTime);
+      TWEEN.update();
     }
     
     
