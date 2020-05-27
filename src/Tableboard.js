@@ -68,7 +68,7 @@ class Tableboard extends THREE.Object3D {
             this.board.add(this.blackTeam[i]);
         }
     }
-
+    
     getSection(posX, posZ) {
         if (posX < this.boardSize && posZ < this.boardSize
             && posX >= 0 && posZ >= 0) {
@@ -102,6 +102,23 @@ class Tableboard extends THREE.Object3D {
                 }
             }
         }
+    }
+
+    changePlayer(gameMode) {
+        var that = this;
+        var currentRot = { rotY : that.rotation.y };
+        var target = { rotY : that.rotation.y + Math.PI };
+        var moveAnim = new TWEEN.Tween(currentRot).to(target, 1000);
+        moveAnim.easing(TWEEN.Easing.Quadratic.InOut);
+        moveAnim.onUpdate(function() { 
+            that.rotation.y = currentRot.rotY;
+        });
+        moveAnim.onComplete(function() { 
+            if (gameMode)
+                gameMode.nextTurn();
+        });
+
+        moveAnim.start();
     }
 
     update(deltaTime) {

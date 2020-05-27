@@ -46,7 +46,9 @@ class Piece extends THREE.Object3D {
                 });
                 that.piece = obj;
                 that.add(that.piece);
-                that.move(that.currentSection);
+                that.position.x = that.currentSection.section.position.x;
+                that.position.z = that.currentSection.section.position.z;
+                that.updateSection(that.currentSection);
                 that.isMoved = false;
                 MyScene.pieceLoaded();
             },
@@ -59,8 +61,23 @@ class Piece extends THREE.Object3D {
         );
     }
 
-    move(section) {
-        this.horizontalMovementAnim(section);   
+    move(section, gameMode = null) {
+        var that = this;
+        var currentPos = { posX : that.position.x, posZ : that.position.z };
+        var target = { posX : section.section.position.x, posZ : section.section.position.z };
+        var moveAnim = new TWEEN.Tween(currentPos).to(target, 1000);
+        moveAnim.easing(TWEEN.Easing.Quadratic.InOut);
+        moveAnim.onUpdate(function() { 
+            that.position.x = currentPos.posX;
+            that.position.z = currentPos.posZ;
+        });
+        moveAnim.onComplete(function() { 
+            if (gameMode)
+                gameMode.rotateTableboard();
+        });
+
+        moveAnim.start();  
+
         this.updateSection(section);
     }
 
@@ -71,22 +88,8 @@ class Piece extends THREE.Object3D {
         this.isMoved = true;
     }
 
-    horizontalMovementAnim(section, shouldStart = true) {
-        var that = this;
-        var currentPos = { posX : that.position.x, posZ : that.position.z };
-        var target = { posX : section.section.position.x, posZ : section.section.position.z };
-        var moveAnim = new TWEEN.Tween(currentPos).to(target, 1000);
-        moveAnim.easing(TWEEN.Easing.Quadratic.InOut);
-        moveAnim.onUpdate(function() { 
-            that.position.x = currentPos.posX;
-            that.position.z = currentPos.posZ;
-        });
+    horizontalMovementAnim(section) {
 
-        if(shouldStart) {
-            moveAnim.start();
-        } else {
-            return moveAnim;
-        }
     }
 
     onClick() {

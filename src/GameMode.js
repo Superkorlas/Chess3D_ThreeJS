@@ -1,17 +1,16 @@
 class GameMode {
-    constructor(tableboard, camera) {
-        this.tableboard = tableboard;
-        this.camera = camera;
-        this.currentSelected = null;
-        this.pickableObjects = new Array();
-        this.currentTurn = teams.WHITE;
-        this.gameState = GameState.SELECT_PIECE;
-        this.isHelpActive = true;
-        this.currentValidMovements = new Array();
+  constructor(tableboard, camera) {
+      this.tableboard = tableboard;
+      this.camera = camera;
+      this.currentSelected = null;
+      this.pickableObjects = new Array();
+      this.currentTurn = teams.WHITE;
+      this.gameState = GameState.SELECT_PIECE;
+      this.isHelpActive = true;
+      this.currentValidMovements = new Array();
 
-        window.addEventListener("mousedown", (event) => this.onMouseDown(event));
-    }
-    
+      window.addEventListener("mousedown", (event) => this.onMouseDown(event));
+  } 
 
   onMouseDown(event) {
     var mouse = new THREE.Vector2();
@@ -73,16 +72,20 @@ class GameMode {
         } else {
           this.currentSelected.unselect();
           this.tableboard.destroyPiece(selectedObject);
-          this.currentSelected.move(selectedObject.currentSection);
-          this.nextTurn();
+          this.currentSelected.move(selectedObject.currentSection, this);
+          this.gameState = GameState.ANIMATION_RUNNING;
         }
 
       } else if (selectedObject instanceof Section) {
-        this.currentSelected.move(selectedObject);
+        this.currentSelected.move(selectedObject, this);
         this.currentSelected.unselect();
-        this.nextTurn();
+        this.gameState = GameState.ANIMATION_RUNNING;
       }
     }
+  }
+
+  rotateTableboard() {
+    this.tableboard.changePlayer(this);
   }
 
   markSections() {
@@ -115,9 +118,6 @@ class GameMode {
     } else {
       this.currentTurn = teams.WHITE;
     }
-
-    //@TODO: tableboard animation
-
     this.gameState = GameState.SELECT_PIECE;
   }
 }
