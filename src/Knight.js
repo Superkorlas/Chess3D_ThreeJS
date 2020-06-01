@@ -27,7 +27,7 @@ class Knight extends Piece {
         return validMovements;
     }
 
-    move(section, gameMode = null) {
+    move(section) {
         var that = this;
         var spline = new THREE.CatmullRomCurve3 ( [
             new THREE.Vector3(this.position.x, 0, this.position.z),
@@ -42,9 +42,7 @@ class Knight extends Piece {
             that.position.copy(spline.getPointAt(percentage.percent));
         });
         moveAnim.onComplete(function() { 
-            if (gameMode) {
-                gameMode.rotateTableboard();
-            }
+            document.dispatchEvent(that.finishedMoveEvent);
         });
         moveAnim.start();
 

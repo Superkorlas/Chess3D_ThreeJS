@@ -9,6 +9,8 @@ class GameMode {
       this.isHelpActive = true;
       this.currentValidMovements = new Array();
 
+      document.addEventListener("pieceMovementFinished",  (event) => this.rotateTableboard());
+      document.addEventListener("tableboardRotationFinished", (event) => this.nextTurn());
       window.addEventListener("mousedown", (event) => this.onMouseDown(event));
   } 
 
@@ -81,13 +83,13 @@ class GameMode {
   }
 
   movePiece(selectedObject) {
-    this.currentSelected.move(selectedObject, this);
+    this.currentSelected.move(selectedObject);
     this.currentSelected.unselect();
     this.gameState = GameState.ANIMATION_RUNNING;
   }
 
   rotateTableboard() {
-    this.tableboard.changePlayer(this);
+    this.tableboard.changePlayer();
   }
 
   destroyPiece(piece) {

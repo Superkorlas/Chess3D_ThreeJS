@@ -14,6 +14,7 @@ class Piece extends THREE.Object3D {
         this.threatenMaterial = new THREE.MeshPhongMaterial({ color: 0xCB3234 });
         this.isSelected = false;
         this.isMoved = false;
+        this.finishedMoveEvent = new Event("pieceMovementFinished");
 
         switch (team) {
             case teams.WHITE:
@@ -73,7 +74,8 @@ class Piece extends THREE.Object3D {
         );
     }
 
-    move(section, gameMode = null) {
+    move(section) {
+        console.log(this.finishedMoveEvent);
         var that = this;
         var currentPos = { posX : that.position.x, posZ : that.position.z };
         var target = { posX : section.section.position.x, posZ : section.section.position.z };
@@ -85,13 +87,12 @@ class Piece extends THREE.Object3D {
             if (that.octree) {
                 var octreeObjects = that.octree.search(that.collider.position, 1, false);
                 if (octreeObjects.length > 0) {
-                    that.onCollision(octreeObjects, gameMode);
+                    that.onCollision(octreeObjects);
                 }
             }
         });
         moveAnim.onComplete(function() { 
-            if (gameMode)
-                gameMode.rotateTableboard();
+            document.dispatchEvent(that.finishedMoveEvent);
         });
 
         moveAnim.start();  
@@ -106,7 +107,7 @@ class Piece extends THREE.Object3D {
         this.isMoved = true;
     }
 
-    onCollision(objects, gameMode = null) {
+    onCollision(objects) {
         //console.log("Total objects: "  + objects.length);
         objects.forEach(object => {
             //console.log(object.userData);

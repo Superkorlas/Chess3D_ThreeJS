@@ -11,6 +11,7 @@ class Tableboard extends THREE.Object3D {
         this.blackTeam = new Array();
         this.board = new THREE.Object3D();
         this.octree = octree;
+        this.event = new Event("tableboardRotationFinished");
 
         this.createBoard();
         this.addPieces();
@@ -114,8 +115,7 @@ class Tableboard extends THREE.Object3D {
             that.rotation.y = currentRot.rotY;
         });
         moveAnim.onComplete(function() { 
-            if (gameMode)
-                gameMode.nextTurn();
+            document.dispatchEvent(that.event);
         });
 
         moveAnim.start();
