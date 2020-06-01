@@ -18,7 +18,7 @@ class MyScene extends THREE.Scene {
     }
 
     MyScene.totalPieces--;
-    if (MyScene.totalPieces <= 0) {
+    if (MyScene.totalPieces <= 0 && !MyScene.ready) {
       window.alert("Todo cargado. Puede empezar a jugar");
       MyScene.ready = true;
       this.lastTime = Date.now();

@@ -1,6 +1,14 @@
 class Pawn extends Piece {
     constructor(team, initialSection) {
         super("Pawn", team, initialSection);
+
+        this.transformed = false;
+        this.transformationLocation;
+        if (this.team == teams.WHITE) {
+            this.transformationLocation = 7;
+        } else {
+            this.transformationLocation = 0;
+        }
     }
 
     getValidMovements(tableboard) {
@@ -53,5 +61,14 @@ class Pawn extends Piece {
             }
         }
         return object;
+    }
+
+    onMovementComplete() {
+        super.onMovementComplete();
+        console.log(this.currentSection.posZ);
+        if (!this.transformed && this.currentSection.posZ == this.transformationLocation) {
+            this.parent.parent.transformPawn(this);
+            this.transformed = true;
+        }
     }
 }

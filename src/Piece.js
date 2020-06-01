@@ -73,12 +73,16 @@ class Piece extends THREE.Object3D {
             that.position.z = currentPos.posZ;
         });
         moveAnim.onComplete(function() { 
-            document.dispatchEvent(that.finishedMoveEvent);
+            that.onMovementComplete();
         });
 
         moveAnim.start();  
 
         this.updateSection(section);
+    }
+
+    onMovementComplete() {
+        document.dispatchEvent(this.finishedMoveEvent);
     }
 
     updateSection(section) {
@@ -125,7 +129,7 @@ class Piece extends THREE.Object3D {
         while (shouldContinue && scope > indexZ) {
             indexZ++;
             var nextSection = tableboard.getSection(x, z + indexZ);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
@@ -141,7 +145,7 @@ class Piece extends THREE.Object3D {
         while (shouldContinue && scope > indexZ) {
             indexZ++;
             var nextSection = tableboard.getSection(x, z - indexZ);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
@@ -157,7 +161,7 @@ class Piece extends THREE.Object3D {
         while (shouldContinue && scope > indexX) {
             indexX++;
             var nextSection = tableboard.getSection(x - indexX, z);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
@@ -173,7 +177,7 @@ class Piece extends THREE.Object3D {
         while (shouldContinue && scope > indexX) {
             indexX++;
             var nextSection = tableboard.getSection(x + indexX, z);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
@@ -191,7 +195,7 @@ class Piece extends THREE.Object3D {
             indexX++;
             indexZ++;
             var nextSection = tableboard.getSection(x - indexX, z + indexZ);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
@@ -209,7 +213,7 @@ class Piece extends THREE.Object3D {
             indexX++;
             indexZ++;
             var nextSection = tableboard.getSection(x + indexX, z + indexZ);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
@@ -227,7 +231,7 @@ class Piece extends THREE.Object3D {
             indexX++;
             indexZ++;
             var nextSection = tableboard.getSection(x - indexX, z - indexZ);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
@@ -245,13 +249,13 @@ class Piece extends THREE.Object3D {
             indexX++;
             indexZ++;
             var nextSection = tableboard.getSection(x + indexX, z - indexZ);
-            shouldContinue = this.getTest(validMovements, nextSection);
+            shouldContinue = this.shouldContinueExploring(validMovements, nextSection);
         }
 
         return validMovements;
     }
 
-    getTest(validMovements, nextSection) {
+    shouldContinueExploring(validMovements, nextSection) {
         var shouldContinue = true;
         var movementObject = this.checkSection(nextSection);
         if (movementObject) {
@@ -286,9 +290,7 @@ class Piece extends THREE.Object3D {
         this.parent.remove(this);
     }
 
-    update() {
-        console.log("jeje");
-    
+    update() {    
     }
 
 }

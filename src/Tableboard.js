@@ -85,6 +85,25 @@ class Tableboard extends THREE.Object3D {
         }
     }
 
+    transformPawn(pawn, newType = "Queen") {
+        var section = pawn.currentSection;
+        var team = pawn.team;
+        var newPiece;
+
+        this.destroyPiece(pawn);
+        
+        if (newType == "Queen") {
+            newPiece = new Queen(team, section);
+        }
+
+        if (team == teams.WHITE) {
+            this.whiteTeam.push(newPiece);
+        } else {
+            this.blackTeam.push(newPiece);
+        }
+        this.board.add(newPiece);
+    }
+
     destroyPiece(piece) {
         if (piece) {
             piece.destroy();

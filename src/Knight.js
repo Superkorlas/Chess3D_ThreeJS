@@ -42,7 +42,7 @@ class Knight extends Piece {
             that.position.copy(spline.getPointAt(percentage.percent));
         });
         moveAnim.onComplete(function() { 
-            document.dispatchEvent(that.finishedMoveEvent);
+            that.onMovementComplete();
         });
         moveAnim.start();
 
