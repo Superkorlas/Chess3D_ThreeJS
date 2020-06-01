@@ -1,6 +1,6 @@
 class Bishop extends Piece {
-    constructor(team, initialSection, octree = null) {
-        super("Bishop", team, initialSection, octree);
+    constructor(team, initialSection) {
+        super("Bishop", team, initialSection);
     }
 
     getValidMovements(tableboard) {

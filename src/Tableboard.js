@@ -2,7 +2,7 @@ const whiteSectionColor = 0xF4F4F4;
 const blackSectionColor = 0x804000;
 
 class Tableboard extends THREE.Object3D {
-    constructor(octree) {
+    constructor() {
         super();
         this.rotateSpeed = 60;
         this.boardSize = 8;
@@ -10,7 +10,6 @@ class Tableboard extends THREE.Object3D {
         this.whiteTeam = new Array();
         this.blackTeam = new Array();
         this.board = new THREE.Object3D();
-        this.octree = octree;
         this.event = new Event("tableboardRotationFinished");
 
         this.createBoard();
@@ -43,22 +42,22 @@ class Tableboard extends THREE.Object3D {
     }
 
     addPieces() {
-        this.whiteTeam.push(new Rook(teams.WHITE, this.sections[0][0], this.octree));  
-        this.blackTeam.push(new Rook(teams.BLACK, this.sections[0][7], this.octree));  
-        this.whiteTeam.push(new Knight(teams.WHITE, this.sections[1][0], this.octree));
-        this.blackTeam.push(new Knight(teams.BLACK, this.sections[1][7], this.octree));
-        this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[2][0], this.octree));
-        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7], this.octree));
-        this.whiteTeam.push(new King(teams.WHITE, this.sections[3][0], this.octree));  
-        this.blackTeam.push(new King(teams.BLACK, this.sections[3][7], this.octree));  
-        this.whiteTeam.push(new Queen(teams.WHITE, this.sections[4][0], this.octree)); 
-        this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7], this.octree)); 
-        this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[5][0], this.octree));
-        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[5][7], this.octree));
-        this.whiteTeam.push(new Knight(teams.WHITE, this.sections[6][0], this.octree));
-        this.blackTeam.push(new Knight(teams.BLACK, this.sections[6][7], this.octree));
-        this.whiteTeam.push(new Rook(teams.WHITE, this.sections[7][0], this.octree));  
-        this.blackTeam.push(new Rook(teams.BLACK, this.sections[7][7], this.octree));  
+        this.whiteTeam.push(new Rook(teams.WHITE, this.sections[0][0]));  
+        this.blackTeam.push(new Rook(teams.BLACK, this.sections[0][7]));  
+        this.whiteTeam.push(new Knight(teams.WHITE, this.sections[1][0]));
+        this.blackTeam.push(new Knight(teams.BLACK, this.sections[1][7]));
+        this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[2][0]));
+        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7]));
+        this.whiteTeam.push(new King(teams.WHITE, this.sections[3][0]));  
+        this.blackTeam.push(new King(teams.BLACK, this.sections[3][7]));  
+        this.whiteTeam.push(new Queen(teams.WHITE, this.sections[4][0])); 
+        this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7])); 
+        this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[5][0]));
+        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[5][7]));
+        this.whiteTeam.push(new Knight(teams.WHITE, this.sections[6][0]));
+        this.blackTeam.push(new Knight(teams.BLACK, this.sections[6][7]));
+        this.whiteTeam.push(new Rook(teams.WHITE, this.sections[7][0]));  
+        this.blackTeam.push(new Rook(teams.BLACK, this.sections[7][7]));  
 
         for (var i = 0; i < this.boardSize; i++) {
             this.whiteTeam.push(new Pawn(teams.WHITE, this.sections[i][1], this.octree));

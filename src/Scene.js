@@ -6,13 +6,7 @@ class MyScene extends THREE.Scene {
     this.createLights ();
     this.createCamera ();
     this.lastTime = Date.now();
-
-    this.octree = new THREE.Octree({
-      undeferred: true,
-      depthMax: 4,
-      overlapPct: 0.4
-    })
-    this.tableboard = new Tableboard(this.octree);
+    this.tableboard = new Tableboard();
     this.add(this.tableboard);
     this.gameMode = new GameMode(this.tableboard, this.camera);
   }
@@ -137,7 +131,6 @@ class MyScene extends THREE.Scene {
     requestAnimationFrame(() => this.update())
 
     if(MyScene.ready) {
-      this.octree.update();
       this.tableboard.update(deltaTime);
       TWEEN.update();
     }

@@ -1,6 +1,6 @@
 class Queen extends Piece {
-    constructor(team, initialSection, octree = null) {
-        super("Queen", team, initialSection, octree);
+    constructor(team, initialSection) {
+        super("Queen", team, initialSection);
     }
 
     getValidMovements(tableboard) {

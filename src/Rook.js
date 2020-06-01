@@ -1,6 +1,6 @@
 class Rook extends Piece {
-    constructor(team, initialSection, octree = null) {
-        super("Rook", team, initialSection, octree);
+    constructor(team, initialSection) {
+        super("Rook", team, initialSection);
     }
 
     getValidMovements(tableboard) {

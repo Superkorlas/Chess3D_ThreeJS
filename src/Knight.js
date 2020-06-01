@@ -1,6 +1,6 @@
 class Knight extends Piece {
-    constructor(team, initialSection, octree = null) {
-        super("Knight", team, initialSection, octree);
+    constructor(team, initialSection) {
+        super("Knight", team, initialSection);
     }
 
     getValidMovements(tableboard) {
