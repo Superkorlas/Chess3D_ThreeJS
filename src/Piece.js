@@ -286,7 +286,6 @@ class Piece extends THREE.Object3D {
     }
 
     destroy() {
-        this.currentSection.currentPiece = null;
         this.parent.remove(this);
     }
 

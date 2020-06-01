@@ -65,7 +65,6 @@ class Pawn extends Piece {
 
     onMovementComplete() {
         super.onMovementComplete();
-        console.log(this.currentSection.posZ);
         if (!this.transformed && this.currentSection.posZ == this.transformationLocation) {
             this.parent.parent.transformPawn(this);
             this.transformed = true;

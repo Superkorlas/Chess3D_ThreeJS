@@ -11,6 +11,8 @@ class Tableboard extends THREE.Object3D {
         this.blackTeam = new Array();
         this.board = new THREE.Object3D();
         this.event = new Event("tableboardRotationFinished");
+        this.whiteKing;
+        this.blackKing;
 
         this.createBoard();
         this.addPieces();
@@ -42,14 +44,17 @@ class Tableboard extends THREE.Object3D {
     }
 
     addPieces() {
+        this.whiteKing = new King(teams.WHITE, this.sections[3][0]);
+        this.blackKing = new King(teams.BLACK, this.sections[3][7]);
+
         this.whiteTeam.push(new Rook(teams.WHITE, this.sections[0][0]));  
         this.blackTeam.push(new Rook(teams.BLACK, this.sections[0][7]));  
         this.whiteTeam.push(new Knight(teams.WHITE, this.sections[1][0]));
         this.blackTeam.push(new Knight(teams.BLACK, this.sections[1][7]));
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[2][0]));
         this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7]));
-        this.whiteTeam.push(new King(teams.WHITE, this.sections[3][0]));  
-        this.blackTeam.push(new King(teams.BLACK, this.sections[3][7]));  
+        this.whiteTeam.push(this.whiteKing);  
+        this.blackTeam.push(this.blackKing);  
         this.whiteTeam.push(new Queen(teams.WHITE, this.sections[4][0])); 
         this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7])); 
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[5][0]));
@@ -137,6 +142,30 @@ class Tableboard extends THREE.Object3D {
         });
 
         moveAnim.start();
+    }
+
+    isInCheck(team) {
+        var pieces = new Array();
+        var king = null;
+        if (team == teams.WHITE) {
+            pieces = this.blackTeam;
+            king = this.whiteKing;
+        } else {
+            pieces = this.whiteTeam;
+            king = this.blackKing;
+        }
+
+        for (var i = 0; i < pieces.length; i++) {
+            var threatened = pieces[i].getValidMovements(this);
+            for (var j = 0; j < threatened.length; j++) {
+                if (threatened[j] == king) {
+                    console.log("check");
+                    return true;
+                } 
+            }
+        }
+
+        return false;
     }
 
     update(deltaTime) {

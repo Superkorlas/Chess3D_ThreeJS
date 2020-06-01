@@ -127,5 +127,9 @@ class GameMode {
       this.currentTurn = teams.WHITE;
     }
     this.gameState = GameState.SELECT_PIECE;
+
+    if (this.tableboard.isInCheck(this.currentTurn)) {
+        alert("Check!");
+    }
   }
 }
