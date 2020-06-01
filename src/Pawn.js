@@ -1,6 +1,6 @@
 class Pawn extends Piece {
-    constructor(team, initialSection) {
-        super("Pawn", team, initialSection);
+    constructor(team, initialSection, octree = null) {
+        super("Pawn", team, initialSection, octree);
     }
 
     getValidMovements(tableboard) {

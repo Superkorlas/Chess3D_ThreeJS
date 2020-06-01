@@ -3,8 +3,9 @@ const whiteColorTeam = 0xF4F4F4;
 const blackColorTeam = 0x804000;
 
 class Piece extends THREE.Object3D {
-    constructor(name, team, initialSection) {
+    constructor(name, team, initialSection, octree = null) {
         super();
+        this.octree = octree;
         this.name = name;
         this.team = team;
         this.material;
@@ -29,6 +30,16 @@ class Piece extends THREE.Object3D {
         this.loader = new THREE.OBJLoader();
         this.piece = new THREE.Object3D();
         this.mesh;
+        var colliderGeometry = new THREE.BoxGeometry(10,20, 10, 1);
+        colliderGeometry.translate(0, 10, 0);
+        var colliderMaterial = new THREE.MeshNormalMaterial({opacity:0, transparent: true});
+        this.collider = new THREE.Mesh(colliderGeometry, colliderMaterial);
+        this.collider.userData = this;
+        this.add(this.collider);
+        if (this.octree) {
+            this.octree.add(this.collider, {useFaces: false});
+        }
+
         this.loadPiece(name, this.material);
     }
 
@@ -42,6 +53,7 @@ class Piece extends THREE.Object3D {
                         child.material = material;
                         child.userData = that;
                         that.mesh = child;
+                        that.mesh.userData = that;
                     }
                 });
                 that.piece = obj;
@@ -70,6 +82,12 @@ class Piece extends THREE.Object3D {
         moveAnim.onUpdate(function() { 
             that.position.x = currentPos.posX;
             that.position.z = currentPos.posZ;
+            if (that.octree) {
+                var octreeObjects = that.octree.search(that.collider.position, 1, false);
+                if (octreeObjects.length > 0) {
+                    that.onCollision(octreeObjects, gameMode);
+                }
+            }
         });
         moveAnim.onComplete(function() { 
             if (gameMode)
@@ -88,8 +106,18 @@ class Piece extends THREE.Object3D {
         this.isMoved = true;
     }
 
-    horizontalMovementAnim(section) {
-
+    onCollision(objects, gameMode = null) {
+        //console.log("Total objects: "  + objects.length);
+        objects.forEach(object => {
+            //console.log(object.userData);
+            if (object.userData != this && object.userData)
+                console.log("Dentro del if");
+            if (object.userData instanceof Piece) {
+                if (object.teams != this.team) {
+                    console.log("collision");
+                }
+            }
+        });
     }
 
     onClick() {
@@ -285,5 +313,14 @@ class Piece extends THREE.Object3D {
         return object;
     }
 
-    update() { }
+    destroy() {
+        this.currentSection.currentPiece = null;
+        this.parent.remove(this);
+    }
+
+    update() {
+        console.log("jeje");
+    
+    }
+
 }

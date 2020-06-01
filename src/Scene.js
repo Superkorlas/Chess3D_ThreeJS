@@ -6,7 +6,13 @@ class MyScene extends THREE.Scene {
     this.createLights ();
     this.createCamera ();
     this.lastTime = Date.now();
-    this.tableboard = new Tableboard();
+
+    this.octree = new THREE.Octree({
+      undeferred: true,
+      depthMax: 4,
+      overlapPct: 0.4
+    })
+    this.tableboard = new Tableboard(this.octree);
     this.add(this.tableboard);
     this.gameMode = new GameMode(this.tableboard, this.camera);
   }
@@ -128,19 +134,14 @@ class MyScene extends THREE.Scene {
     var deltaTime = (currentTime - this.lastTime) / 1000;
     this.lastTime = currentTime;
 
-    // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
-    
-    // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
-    // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
     requestAnimationFrame(() => this.update())
 
     if(MyScene.ready) {
+      this.octree.update();
       this.tableboard.update(deltaTime);
       TWEEN.update();
     }
     
-    
-    // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
   }
 

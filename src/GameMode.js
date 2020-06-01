@@ -55,37 +55,43 @@ class GameMode {
       this.currentSelected.unselect();
 
     if (this.gameState == GameState.SELECT_PIECE) {
-      this.currentSelected = selectedObject;
-      selectedObject.onClick();
-      this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
-      this.markSections();
-      this.gameState = GameState.SELECT_MOVEMENT;
-
+      this.selectPiece(selectedObject);
+      
     } else if (this.gameState == GameState.SELECT_MOVEMENT) {
       if (selectedObject instanceof Piece) {
         if (selectedObject.team == this.currentTurn) {
-          this.currentSelected = selectedObject;
-          selectedObject.onClick();
-          this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
-          this.markSections();
-          this.gameState = GameState.SELECT_MOVEMENT;
+          this.selectPiece(selectedObject);
         } else {
-          this.currentSelected.unselect();
-          this.tableboard.destroyPiece(selectedObject);
-          this.currentSelected.move(selectedObject.currentSection, this);
-          this.gameState = GameState.ANIMATION_RUNNING;
+          this.movePiece(selectedObject.currentSection); 
+          this.destroyPiece(selectedObject);
         }
 
       } else if (selectedObject instanceof Section) {
-        this.currentSelected.move(selectedObject, this);
-        this.currentSelected.unselect();
-        this.gameState = GameState.ANIMATION_RUNNING;
+        this.movePiece(selectedObject);
       }
     }
+  }
+  
+  selectPiece(selectedObject) {
+    this.currentSelected = selectedObject;
+    selectedObject.onClick();
+    this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
+    this.markSections();
+    this.gameState = GameState.SELECT_MOVEMENT;
+  }
+
+  movePiece(selectedObject) {
+    this.currentSelected.move(selectedObject, this);
+    this.currentSelected.unselect();
+    this.gameState = GameState.ANIMATION_RUNNING;
   }
 
   rotateTableboard() {
     this.tableboard.changePlayer(this);
+  }
+
+  destroyPiece(piece) {
+    this.tableboard.destroyPiece(piece);
   }
 
   markSections() {
