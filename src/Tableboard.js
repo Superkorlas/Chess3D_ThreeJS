@@ -144,30 +144,6 @@ class Tableboard extends THREE.Object3D {
         moveAnim.start();
     }
 
-    isInCheck(team) {
-        var pieces = new Array();
-        var king = null;
-        if (team == teams.WHITE) {
-            pieces = this.blackTeam;
-            king = this.whiteKing;
-        } else {
-            pieces = this.whiteTeam;
-            king = this.blackKing;
-        }
-
-        for (var i = 0; i < pieces.length; i++) {
-            var threatened = pieces[i].getValidMovements(this);
-            for (var j = 0; j < threatened.length; j++) {
-                if (threatened[j] == king) {
-                    console.log("check");
-                    return true;
-                } 
-            }
-        }
-
-        return false;
-    }
-
     update(deltaTime) {
     }
 }

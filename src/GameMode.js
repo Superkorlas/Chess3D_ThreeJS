@@ -78,8 +78,14 @@ class GameMode {
     this.currentSelected = selectedObject;
     selectedObject.onClick();
     this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
+    this.deleteCheckMovements();
     this.markSections();
     this.gameState = GameState.SELECT_MOVEMENT;
+  }
+
+  deleteCheckMovements() {
+      //TODO: Delete check movements from this.currentValidMovements
+      //simulate a tableboard??
   }
 
   movePiece(selectedObject) {
@@ -128,8 +134,42 @@ class GameMode {
     }
     this.gameState = GameState.SELECT_PIECE;
 
-    if (this.tableboard.isInCheck(this.currentTurn)) {
-        alert("Check!");
+    if (this.isInCheck(this.tableboard)) {
+        if (!this.isCheckMate()) {
+            alert("Check!");
+        } else {
+            alert("Checkmate!!");
+            //TODO: End game.
+        }
     }
+  }
+
+  isInCheck(tableboard) {
+    var pieces = new Array();
+    var king = null;
+    if (this.currentTurn == teams.WHITE) {
+        pieces = tableboard.blackTeam;
+        king = tableboard.whiteKing;
+    } else {
+        pieces = tableboard.whiteTeam;
+        king = tableboard.blackKing;
+    }
+
+    for (var i = 0; i < pieces.length; i++) {
+        var threatened = pieces[i].getValidMovements(tableboard);
+        for (var j = 0; j < threatened.length; j++) {
+            if (threatened[j] == king) {
+                console.log("check");
+                return true;
+            } 
+        }
+    }
+
+    return false;
+  }
+
+  isCheckMate() {
+      //TODO: implementation
+      return false;
   }
 }
