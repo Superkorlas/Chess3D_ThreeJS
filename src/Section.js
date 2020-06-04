@@ -9,6 +9,8 @@ class Section extends THREE.Object3D {
         this.currentPiece = null;
         this.posX = posX;
         this.posZ = posZ;
+        this.isInSimulation = false;
+        this.simulationPiece = null;
 
         this.material = new THREE.MeshPhongMaterial({ color: this.color });
         this.geometry = new THREE.BoxGeometry(this.size,1,this.size);
@@ -38,5 +40,18 @@ class Section extends THREE.Object3D {
     unselect() {
         this.section.material = this.material;
         this.isSelected = false;
+    }
+
+    onSimulate(piece = null) {
+        this.simulationPiece = piece;
+        this.isInSimulation = !this.isInSimulation;
+    }
+
+    getCurrentPiece() {
+        if (this.isInSimulation) {
+            return this.simulationPiece;
+        } else {
+            return this.currentPiece;
+        }
     }
 }

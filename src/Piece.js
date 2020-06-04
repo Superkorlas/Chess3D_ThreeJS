@@ -273,9 +273,10 @@ class Piece extends THREE.Object3D {
         var object = null;
 
         if (section) {
-            if (section.currentPiece != null) {
-                if (section.currentPiece.team != this.team) {
-                    object = section.currentPiece;
+            var currentPiece = section.getCurrentPiece();
+            if (currentPiece != null) {
+                if (currentPiece.team != this.team) {
+                    object = currentPiece;
                 }
             } else {
                 object = section;

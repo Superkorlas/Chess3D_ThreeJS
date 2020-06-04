@@ -32,11 +32,23 @@ class Pawn extends Piece {
             }
         }
 
+        var sectionPiece;
         nextSection = tableboard.getSection(x + 1 * direction, z + 1 * direction);
+        if (this.canAttackSection(nextSection)) {
+            validMovements.push(nextSection.getCurrentPiece());
+        }
+
+        nextSection = tableboard.getSection(x - 1 * direction, z + 1 * direction);
+        if (this.canAttackSection(nextSection)) {
+            validMovements.push(nextSection.getCurrentPiece());
+        }
+
+        /*
         if (nextSection) {
-            if (nextSection.currentPiece != null) {
-                if (this.team != nextSection.currentPiece.team) {
-                    validMovements.push(nextSection.currentPiece);
+            sectionPiece = nextSection.getCurrentPiece();
+            if (sectionPiece != null) {
+                if (this.team != sectionPiece.team) {
+                    validMovements.push(sectionPiece);
                 }
             }
         }
@@ -48,7 +60,7 @@ class Pawn extends Piece {
                     validMovements.push(nextSection.currentPiece);
                 }
             }
-        }
+        }*/
 
         return validMovements;
     }
@@ -56,11 +68,24 @@ class Pawn extends Piece {
     checkSection(section) {
         var object = null;
         if (section) {
-            if (section.currentPiece == null) {
+            if (section.getCurrentPiece() == null) {
                 object = section;
             }
         }
         return object;
+    }
+
+    canAttackSection(section) {
+        if (section) {
+            var sectionPiece = section.getCurrentPiece();
+            if (sectionPiece != null) {
+                if (this.team != sectionPiece.team) {
+                    return true;
+                    //validMovements.push(sectionPiece);
+                }
+            }
+        }
+        return false;
     }
 
     onMovementComplete() {
