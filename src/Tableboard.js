@@ -19,7 +19,14 @@ class Tableboard extends THREE.Object3D {
         this.board.position.x = -(this.boardSize / 2 * this.sections[0][0].size - this.sections[0][0].size / 2);
         this.board.position.z = this.boardSize / 2 * this.sections[0][0].size - this.sections[0][0].size / 2;
         
-        this.add(this.board);
+		this.add(this.board);
+		
+		var geometry = new THREE.TorusGeometry( 151, 10, 4, 4 );
+		geometry.rotateX(90*Math.PI / 180);
+		geometry.rotateY(45*Math.PI / 180);
+		var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: new THREE.TextureLoader().load("../assets/textures/white_section.jpg") } );
+		var border = new THREE.Mesh( geometry, material );
+		this.add( border );
     }
 
     createBoard() {

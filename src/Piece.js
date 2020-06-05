@@ -1,6 +1,6 @@
 
-const whiteColorTeam = 0xF4F4F4;
-const blackColorTeam = 0x804000;
+const pieceColor = 0xFDFBFB;
+//const blackColorTeam = 0x804000;
 
 class Piece extends THREE.Object3D {
     constructor(name, team, initialSection) {
@@ -9,24 +9,26 @@ class Piece extends THREE.Object3D {
         this.team = team;
         this.material;
         this.currentSection = initialSection;
-        this.selectedMaterial = new THREE.MeshPhongMaterial({ color: 0x00893F });
-        this.threatenMaterial = new THREE.MeshPhongMaterial({ color: 0xCB3234 });
         this.isSelected = false;
-        this.isMoved = false;
+		this.isMoved = false;
         this.finishedMoveEvent = new Event("pieceMovementFinished");
-
+		this.texture;
         switch (team) {
             case teams.WHITE:
-                this.material = new THREE.MeshPhongMaterial({ color: whiteColorTeam });
+                this.texture = new THREE.TextureLoader().load("../assets/textures/white_piece.jpg");
                 break;
             case teams.BLACK:
-                this.material = new THREE.MeshPhongMaterial({ color: blackColorTeam });
-                break;
+				this.texture = new THREE.TextureLoader().load("../assets/textures/black_piece.jpg");
+				break;                break;
             default:
                 window.alert("Not valid team for " + this.name);
                 break;
-        }
-
+		}
+		
+		this.material = new THREE.MeshPhongMaterial({ color: pieceColor, map: this.texture });
+		this.selectedMaterial = new THREE.MeshLambertMaterial({ color: pieceColor, emissive: 0x00893F, map: this.texture });
+		this.threatenMaterial = new THREE.MeshPhongMaterial({ color: pieceColor, emissive: 0xCB3234  , map: this.texture });
+		
         this.loader = new THREE.OBJLoader();
         this.piece = new THREE.Object3D();
         this.mesh;
@@ -34,7 +36,7 @@ class Piece extends THREE.Object3D {
     }
 
     loadPiece(name, material) {
-        var modelPath = "../assets/" + name + ".obj";
+        var modelPath = "../assets/model/" + name + ".obj";
         var that = this;
         this.loader.load(modelPath,
             function (obj) {
@@ -104,7 +106,7 @@ class Piece extends THREE.Object3D {
         if (isThreatened) {
             this.mesh.material = this.threatenMaterial;
         } else {
-            this.mesh.material = this.selectedMaterial;
+			this.mesh.material = this.selectedMaterial;
         }
         this.isSelected = true;
     }

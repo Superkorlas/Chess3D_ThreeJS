@@ -30,7 +30,8 @@ class MyScene extends THREE.Scene {
     //   El ángulo del campo de visión en grados sexagesimales
     //   La razón de aspecto ancho/alto
     //   Los planos de recorte cercano y lejano
-    this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+	this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+	//this.camera = new THREE.OrthographicCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     // También se indica dónde se coloca
     this.camera.position.set (0, 200, 200);
     // Y hacia dónde mira
@@ -42,44 +43,20 @@ class MyScene extends THREE.Scene {
   createGUI () {
     // Se crea la interfaz gráfica de usuario
     var gui = new dat.GUI();
-    
-    // La escena le va a añadir sus propios controles. 
-    // Se definen mediante una   new function()
-    // En este caso la intensidad de la luz y si se muestran o no los ejes
-    this.guiControls = new function() {
-      // En el contexto de una función   this   alude a la función
-      this.lightIntensity = 0.5;
-      this.axisOnOff = true;
-    }
-
-    // Se crea una sección para los controles de esta clase
-    var folder = gui.addFolder ('Luz y Ejes');
-    
-    // Se le añade un control para la intensidad de la luz
-    folder.add (this.guiControls, 'lightIntensity', 0, 1, 0.1).name('Intensidad de la Luz : ');
-    
-    // Y otro para mostrar u ocultar los ejes
-    folder.add (this.guiControls, 'axisOnOff').name ('Mostrar ejes : ');
-    
     return gui;
   }
   
   createLights () {
-    // Se crea una luz ambiental, evita que se vean complentamente negras las zonas donde no incide de manera directa una fuente de luz
-    // La luz ambiental solo tiene un color y una intensidad
-    // Se declara como   var   y va a ser una variable local a este método
-    //    se hace así puesto que no va a ser accedida desde otros métodos
     var ambientLight = new THREE.AmbientLight(0xccddee, 0.35);
-    // La añadimos a la escena
     this.add (ambientLight);
     
-    // Se crea una luz focal que va a ser la luz principal de la escena
-    // La luz focal, además tiene una posición, y un punto de mira
-    // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
-    // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
-    this.spotLight = new THREE.SpotLight( 0xffffff, this.guiControls.lightIntensity );
-    this.spotLight.position.set( 0, 100, 0 );
-    this.add (this.spotLight);
+    this.spotLight = new THREE.SpotLight( 0xffffff, 0.5 );
+    this.spotLight.position.set( 0, 100, 130 );
+	this.add (this.spotLight);
+	
+	this.spotLight2 = new THREE.SpotLight( 0xffffff, 0.5 );
+	this.spotLight2.position.set( 0, 100, -130 );
+	this.add(this.spotLight2);
   }
   
   createRenderer (myCanvas) {

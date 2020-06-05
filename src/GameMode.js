@@ -141,16 +141,22 @@ class GameMode {
 	}
 
 	nextTurn() {
+		var currentKing;
 		if (this.currentTurn == teams.WHITE) {
 			this.currentTurn = teams.BLACK;
+			currentKing = this.tableboard.blackKing;
+			this.tableboard.whiteKing.uncheck();
 		} else {
 			this.currentTurn = teams.WHITE;
+			currentKing = this.tableboard.whiteKing;
+			this.tableboard.blackKing.uncheck();
 		}
 		this.gameState = GameState.SELECT_PIECE;
 
 		if (this.isInCheck()) {
 			if (!this.isCheckMate()) {
 				alert("Check!");
+				currentKing.check();
 			} else {
 				alert("Checkmate!!");
 				//TODO: End game.
@@ -181,7 +187,6 @@ class GameMode {
 				}
 			}
 		}
-
 		return false;
 	}
 
