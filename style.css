@@ -1,0 +1,10 @@
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+#messages{
+	position:absolute; 
+	left:100px; 
+	top:10px
+}

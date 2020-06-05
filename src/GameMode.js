@@ -15,19 +15,21 @@ class GameMode {
 	} 
 
 	onMouseDown(event) {
-		var mouse = new THREE.Vector2();
-		mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-		mouse.y = 1 - 2 * (event.clientY / window.innerHeight);
+		if (MyScene.ready) {
+			var mouse = new THREE.Vector2();
+			mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+			mouse.y = 1 - 2 * (event.clientY / window.innerHeight);
 
-		var raycaster = new THREE.Raycaster();
-		raycaster.setFromCamera(mouse, this.camera);
-		
-		this.updatePickableObject();
-		var pickedObjects = raycaster.intersectObjects (this.pickableObjects, true);
-		
-		if (pickedObjects.length > 0) {
-			var selectedObject = pickedObjects[0].object;
-			this.executeTurnAction(selectedObject.userData);
+			var raycaster = new THREE.Raycaster();
+			raycaster.setFromCamera(mouse, this.camera);
+			
+			this.updatePickableObject();
+			var pickedObjects = raycaster.intersectObjects (this.pickableObjects, true);
+			
+			if (pickedObjects.length > 0) {
+				var selectedObject = pickedObjects[0].object;
+				this.executeTurnAction(selectedObject.userData);
+			}
 		}
 	}
 
@@ -80,7 +82,7 @@ class GameMode {
 		this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
 		this.deleteInvalidForCheckMovements(this.currentSelected);
 		this.markSections();
-		this.gameState = GameState.SELECT_MOVEMENT;
+		this.setGameState(GameState.SELECT_MOVEMENT);
 	}
 
 	deleteInvalidForCheckMovements(piece) {
@@ -105,7 +107,7 @@ class GameMode {
 	movePiece(selectedObject) {
 		this.currentSelected.move(selectedObject);
 		this.currentSelected.unselect();
-		this.gameState = GameState.ANIMATION_RUNNING;
+		this.setGameState(GameState.ANIMATION_RUNNING);
 	}
 
 	rotateTableboard() {
@@ -151,16 +153,17 @@ class GameMode {
 			currentKing = this.tableboard.whiteKing;
 			this.tableboard.blackKing.uncheck();
 		}
-		this.gameState = GameState.SELECT_PIECE;
+		this.setGameState(GameState.SELECT_PIECE);
 
 		if (this.isInCheck()) {
 			if (!this.isCheckMate()) {
 				alert("Check!");
-				currentKing.check();
+				MyScene.addToMessage("Be careful! Your king is threatened!");
 			} else {
-				alert("Checkmate!!");
-				//TODO: End game.
+				this.setGameState(GameState.CHECK_MATE);
+				alert("Checkmate!! You loose");
 			}
+			currentKing.check();
 		}
 	}
 
@@ -208,5 +211,35 @@ class GameMode {
 		}
 
 		return true;
+	}
+
+	setGameState(newState) {
+		this.gameState = newState;
+
+		switch(this.gameState) {
+			case GameState.SELECT_PIECE: 
+				this.sendMessage("select a piece to move");
+				break;
+			case GameState.SELECT_MOVEMENT: 
+				this.sendMessage("select the movement");
+				break;
+			case GameState.ANIMATION_RUNNING: 
+				this.sendMessage("");
+				break;
+			case GameState.CHECK_MATE:
+				this.sendMessage("You loose!");
+				//TODO: button to other match??
+				break;
+		}
+	}
+
+	sendMessage(text) {
+		var introMessage = "";
+		if(this.currentTurn == teams.WHITE) {
+			introMessage = "White team";
+		} else {
+			introMessage = "Black team";
+		}
+		MyScene.setMessage(introMessage + " " + text);
 	}
 }

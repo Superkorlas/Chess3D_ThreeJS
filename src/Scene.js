@@ -1,6 +1,7 @@
 class MyScene extends THREE.Scene {
   constructor (myCanvas) {
-    super();    
+	super();   
+	MyScene.setMessage("Loading: 0%"); 
     this.renderer = this.createRenderer(myCanvas);   
     this.gui = this.createGUI ();        
     this.createLights ();
@@ -13,17 +14,33 @@ class MyScene extends THREE.Scene {
 
   static pieceLoaded() {
     if (typeof MyScene.totalPieces == 'undefined') {
-      MyScene.totalPieces = 32;
+      MyScene.totalPieces = 0;
       MyScene.ready = false;
-    }
+	}
 
-    MyScene.totalPieces--;
-    if (MyScene.totalPieces <= 0 && !MyScene.ready) {
+	MyScene.totalPieces++;
+	
+	var loadedPercent = (MyScene.totalPieces / 32) * 100;
+	MyScene.setMessage("Loading: " + loadedPercent + "%");
+
+    if (MyScene.totalPieces >= 32 && !MyScene.ready) {
       window.alert("Todo cargado. Puede empezar a jugar");
       MyScene.ready = true;
-      this.lastTime = Date.now();
+	  this.lastTime = Date.now();
+	  MyScene.setMessage("Play!");
     }
   }
+
+	static setMessage(text) {
+		document.getElementById("messages").innerHTML = text;
+	}
+
+	static addToMessage(text) {
+		var messageContainer = document.getElementById("messages");
+		var paragraph = document.createElement("p");
+		paragraph.innerHTML = text;
+		messageContainer.append(paragraph);
+	}
   
   createCamera () {
     // Para crear una cámara le indicamos
