@@ -10,7 +10,6 @@ class Piece extends THREE.Object3D {
         this.material;
         this.currentSection = initialSection;
         this.isSelected = false;
-		this.isMoved = false;
         this.finishedMoveEvent = new Event("pieceMovementFinished");
 		this.texture;
         switch (team) {
@@ -29,39 +28,23 @@ class Piece extends THREE.Object3D {
 		this.selectedMaterial = new THREE.MeshLambertMaterial({ color: pieceColor, emissive: 0x00893F, map: this.texture });
 		this.threatenMaterial = new THREE.MeshPhongMaterial({ color: pieceColor, emissive: 0xCB3234  , map: this.texture });
 		
-        this.loader = new THREE.OBJLoader();
         this.piece = new THREE.Object3D();
-        this.mesh;
-        this.loadPiece(name, this.material);
-    }
-
-    loadPiece(name, material) {
-        var modelPath = "../assets/model/" + name + ".obj";
-        var that = this;
-        this.loader.load(modelPath,
-            function (obj) {
-                obj.traverse(function (child) {
-                    if (child instanceof THREE.Mesh) {
-                        child.material = material;
-                        child.userData = that;
-                        that.mesh = child;
-                    }
-                });
-                that.piece = obj;
-                that.add(that.piece);
-                that.position.x = that.currentSection.section.position.x;
-                that.position.z = that.currentSection.section.position.z;
-                that.updateSection(that.currentSection);
-                that.isMoved = false;
-                MyScene.pieceLoaded();
-            },
-            function (xhr) {
-                //console.log((xhr.loaded / xhr.total * 100) + "% loaded")
-            },
-            function (err) {
-                //console.error("Error loading model")
-            }
-        );
+		this.mesh;
+		var that = this;
+		this.piece = getModel(this.name).clone();
+		this.piece.traverse(function (child) {
+			if (child instanceof THREE.Mesh) {
+				child.material = that.material;
+				child.userData = that;
+				that.mesh = child;
+			}
+		});
+		this.piece.userData = this;
+		this.add(this.piece);
+		this.position.x = this.currentSection.section.position.x;
+		this.position.z = this.currentSection.section.position.z;
+		this.updateSection(this.currentSection);
+		this.isMoved = false;
     }
 
     move(section) {
@@ -104,7 +87,7 @@ class Piece extends THREE.Object3D {
 
     select(isThreatened) {
         if (isThreatened) {
-            this.mesh.material = this.threatenMaterial;
+			this.mesh.material = this.threatenMaterial;
         } else {
 			this.mesh.material = this.selectedMaterial;
         }

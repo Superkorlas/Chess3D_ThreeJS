@@ -5,6 +5,36 @@ body {
 
 #messages{
 	position:absolute; 
+	left:300px; 
+	top:10px;
+	font-family: sans-serif;
+	font-size: 18px;
+	font-weight: 400;
+	color: #ffffff;
+	background: #889ccf;
+	margin: 0 0 25px;
+	overflow: hidden;
+	padding: 20px;
+	border-radius: 35px 0px 35px 0px;
+	-moz-border-radius: 35px 0px 35px 0px;
+	-webkit-border-radius: 35px 0px 35px 0px;
+	border: 2px solid #5878ca;
+}
+
+#test{
+	position:absolute; 
 	left:100px; 
-	top:10px
+	top:10px;
+	font-family: sans-serif;
+	font-size: 18px;
+	font-weight: 400;
+	color: #ffffff;
+	background: #889ccf;
+	margin: 0 0 25px;
+	overflow: hidden;
+	padding: 20px;
+	border-radius: 35px 0px 35px 0px;
+	-moz-border-radius: 35px 0px 35px 0px;
+	-webkit-border-radius: 35px 0px 35px 0px;
+	border: 2px solid #5878ca;
 }

@@ -1,35 +1,36 @@
 class MyScene extends THREE.Scene {
-  constructor (myCanvas) {
-	super();   
-	MyScene.setMessage("Loading: 0%"); 
-    this.renderer = this.createRenderer(myCanvas);   
-    this.gui = this.createGUI ();        
-    this.createLights ();
-    this.createCamera ();
-    this.lastTime = Date.now();
-    this.tableboard = new Tableboard();
-    this.add(this.tableboard);
-    this.gameMode = new GameMode(this.tableboard, this.camera);
-  }
-
-  static pieceLoaded() {
-    if (typeof MyScene.totalPieces == 'undefined') {
-      MyScene.totalPieces = 0;
-      MyScene.ready = false;
+	constructor (myCanvas) {
+		super();   
+		MyScene.setMessage("Loading: 0%"); 
+		this.renderer = this.createRenderer(myCanvas);   
+		this.gui = this.createGUI ();        
+		this.createLights ();
+		this.createCamera ();
+		this.lastTime = Date.now();
+		this.tableboard = new Tableboard();
+		this.add(this.tableboard);
+		this.gameMode = new GameMode(this.tableboard, this.camera);
+		this.started = false;
 	}
 
-	MyScene.totalPieces++;
-	
-	var loadedPercent = (MyScene.totalPieces / 32) * 100;
-	MyScene.setMessage("Loading: " + loadedPercent + "%");
+	static pieceLoaded() {
+		if (typeof MyScene.totalPieces == 'undefined') {
+			MyScene.totalPieces = 6;
+			MyScene.piecesLoaded = 0;
+			MyScene.ready = false;
+		}
 
-    if (MyScene.totalPieces >= 32 && !MyScene.ready) {
-      window.alert("Todo cargado. Puede empezar a jugar");
-      MyScene.ready = true;
-	  this.lastTime = Date.now();
-	  MyScene.setMessage("Play!");
-    }
-  }
+		MyScene.piecesLoaded++;
+		
+		var loadedPercent = (MyScene.piecesLoaded / MyScene.totalPieces) * 100;
+		MyScene.setMessage("Loading: " + loadedPercent + "%");
+
+		if (MyScene.piecesLoaded >= MyScene.totalPieces && !MyScene.ready) {
+			MyScene.ready = true;
+			this.lastTime = Date.now();
+			MyScene.setMessage("Play!");
+		}
+	}
 
 	static setMessage(text) {
 		document.getElementById("messages").innerHTML = text;
@@ -43,22 +44,14 @@ class MyScene extends THREE.Scene {
 	}
   
   createCamera () {
-    // Para crear una cámara le indicamos
-    //   El ángulo del campo de visión en grados sexagesimales
-    //   La razón de aspecto ancho/alto
-    //   Los planos de recorte cercano y lejano
 	this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-	//this.camera = new THREE.OrthographicCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    // También se indica dónde se coloca
     this.camera.position.set (0, 200, 200);
-    // Y hacia dónde mira
     var look = new THREE.Vector3 (0,0,0);
     this.camera.lookAt(look);
     this.add (this.camera);
   }
   
   createGUI () {
-    // Se crea la interfaz gráfica de usuario
     var gui = new dat.GUI();
     return gui;
   }
@@ -95,25 +88,16 @@ class MyScene extends THREE.Scene {
   }
   
   getCamera () {
-    // En principio se devuelve la única cámara que tenemos
-    // Si hubiera varias cámaras, este método decidiría qué cámara devuelve cada vez que es consultado
     return this.camera;
   }
   
   setCameraAspect (ratio) {
-    // Cada vez que el usuario modifica el tamaño de la ventana desde el gestor de ventanas de
-    // su sistema operativo hay que actualizar el ratio de aspecto de la cámara
     this.camera.aspect = ratio;
-    // Y si se cambia ese dato hay que actualizar la matriz de proyección de la cámara
     this.camera.updateProjectionMatrix();
   }
   
   onWindowResize () {
-    // Este método es llamado cada vez que el usuario modifica el tamapo de la ventana de la aplicación
-    // Hay que actualizar el ratio de aspecto de la cámara
-    this.setCameraAspect (window.innerWidth / window.innerHeight);
-    
-    // Y también el tamaño del renderizador
+    this.setCameraAspect (window.innerWidth / window.innerHeight); 
     this.renderer.setSize (window.innerWidth, window.innerHeight);
   }
 
@@ -126,12 +110,15 @@ class MyScene extends THREE.Scene {
 
     if(MyScene.ready) {
       this.tableboard.update(deltaTime);
-      TWEEN.update();
+	  TWEEN.update();
+	  if (!this.started) {
+		document.dispatchEvent(new Event("Play"));
+		this.started = true;
+	  }
     }
     
     this.renderer.render (this, this.getCamera());
   }
-
 
 }
 

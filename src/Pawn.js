@@ -92,7 +92,8 @@ class Pawn extends Piece {
         super.onMovementComplete();
         if (!this.transformed && this.currentSection.posZ == this.transformationLocation) {
             this.parent.parent.transformPawn(this);
-            this.transformed = true;
+			this.transformed = true;
+			document.dispatchEvent(new Event("TransformPawn"));
         }
     }
 }

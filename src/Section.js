@@ -59,5 +59,13 @@ class Section extends THREE.Object3D {
         } else {
             return this.currentPiece;
         }
-    }
+	}
+	
+	reset() {
+		this.unselect();
+        this.currentPiece = null;
+        this.isInSimulation = false;
+		this.simulationPiece = null;
+	}
+
 }

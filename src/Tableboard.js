@@ -15,7 +15,7 @@ class Tableboard extends THREE.Object3D {
         this.blackKing;
 
         this.createBoard();
-        this.addPieces();
+        document.addEventListener("Play", (event) => this.addPieces());
         this.board.position.x = -(this.boardSize / 2 * this.sections[0][0].size - this.sections[0][0].size / 2);
         this.board.position.z = this.boardSize / 2 * this.sections[0][0].size - this.sections[0][0].size / 2;
         
@@ -51,6 +51,9 @@ class Tableboard extends THREE.Object3D {
     }
 
     addPieces() {
+		this.whiteTeam = new Array();
+		this.blackTeam = new Array();
+
         this.whiteKing = new King(teams.WHITE, this.sections[3][0]);
         this.blackKing = new King(teams.BLACK, this.sections[3][7]);
 
@@ -118,7 +121,8 @@ class Tableboard extends THREE.Object3D {
 
     destroyPiece(piece) {
         if (piece) {
-            piece.destroy();
+			piece.destroy();
+			//piece.parent.remove(piece);
             if (piece.team == teams.WHITE) {
                 for (var i = 0; i < this.whiteTeam.length; i++) {
                     if (this.whiteTeam[i] == piece) {
@@ -135,10 +139,19 @@ class Tableboard extends THREE.Object3D {
         }
     }
 
-    changePlayer(gameMode) {
-        var that = this;
-        var currentRot = { rotY : that.rotation.y };
-        var target = { rotY : that.rotation.y + Math.PI };
+    changePlayer() {
+		var that = this;
+		var current;
+		var newRot;
+		if(this.rotation.y == 0) {
+			current = 0;
+			newRot = Math.PI;
+		} else {
+			current = Math.PI;
+			newRot = 0;
+		}
+        var currentRot = { rotY : current };
+        var target = { rotY : newRot };
         var moveAnim = new TWEEN.Tween(currentRot).to(target, 1000);
         moveAnim.easing(TWEEN.Easing.Quadratic.InOut);
         moveAnim.onUpdate(function() { 
@@ -152,5 +165,25 @@ class Tableboard extends THREE.Object3D {
     }
 
     update(deltaTime) {
-    }
+	}
+	
+	newMatch() {
+		this.whiteTeam.forEach(piece => {
+			piece.destroy();
+		});
+		this.whiteTeam = new Array();
+
+		this.blackTeam.forEach(piece => {
+			piece.destroy();
+		});
+		this.blackTeam = new Array();
+
+		for(var i = 0; i < this.sections.length; i++) {
+			for(var j = 0; j < this.sections[i].length; j++) {
+				this.sections[i][j].reset();
+			}
+		}
+
+		this.addPieces();
+	}
 }

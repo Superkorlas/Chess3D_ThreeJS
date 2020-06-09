@@ -8,11 +8,23 @@ class GameMode {
 		this.gameState = GameState.SELECT_PIECE;
 		this.isHelpActive = true;
 		this.currentValidMovements = new Array();
+		var that = this;
 
 		document.addEventListener("pieceMovementFinished",  (event) => this.rotateTableboard());
 		document.addEventListener("tableboardRotationFinished", (event) => this.nextTurn());
+		document.addEventListener("", (event) => this.onTransformPawn());
 		window.addEventListener("mousedown", (event) => this.onMouseDown(event));
-	} 
+		document.getElementById("newMatchButton").onclick = function() { that.newMatch()};
+	}
+	
+	newMatch() {
+		if (this.gameState != GameState.ANIMATION_RUNNING) {
+			this.tableboard.newMatch();
+			if (this.currentTurn == teams.BLACK) {
+				this.rotateTableboard();
+			}
+		}
+	}
 
 	onMouseDown(event) {
 		if (MyScene.ready) {
@@ -230,7 +242,13 @@ class GameMode {
 				this.sendMessage("You loose!");
 				//TODO: button to other match??
 				break;
+			case GameState.TRANSFORMING_PAWN:
+				break;
 		}
+	}
+
+	onTransformPawn() {
+		this.setGameState(GameState.TRANSFORMING_PAWN);
 	}
 
 	sendMessage(text) {
