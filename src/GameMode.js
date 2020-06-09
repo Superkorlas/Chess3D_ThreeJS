@@ -96,12 +96,19 @@ class GameMode {
 		selectedObject.onClick();
 		this.currentValidMovements = this.currentSelected.getValidMovements(this.tableboard);
 		this.deleteInvalidForCheckMovements(this.currentSelected);
+		if (this.currentSelected instanceof King) {
+			if(this.currentSelected.canCastlingLarge(this.tableboard)) {
+				this.currentValidMovements.push(this.tableboard.getSection(this.currentSelected.currentSection.posX+2, this.currentSelected.currentSection.posZ));
+			}
+			if(this.currentSelected.canCastlingShort(this.tableboard)) {
+				this.currentValidMovements.push(this.tableboard.getSection(this.currentSelected.currentSection.posX-2, this.currentSelected.currentSection.posZ));
+			}
+		}
 		this.markSections();
 		this.setGameState(GameState.SELECT_MOVEMENT);
 	}
 
 	deleteInvalidForCheckMovements(piece) {
-		//TODO: Delete check movements from this.currentValidMovements
 		var validMovements = new Array();
 		for (var i = 0; i < this.currentValidMovements.length; i++) {
 			var section = this.currentValidMovements[i];
@@ -180,29 +187,7 @@ class GameMode {
 	}
 
 	isInCheck() {
-		var pieces = new Array();
-		var king = null;
-		if (this.currentTurn == teams.WHITE) {
-			pieces = this.tableboard.blackTeam;
-			king = this.tableboard.whiteKing;
-		} else {
-			pieces = this.tableboard.whiteTeam;
-			king = this.tableboard.blackKing;
-		}
-
-		for (var i = 0; i < pieces.length; i++) {
-			var piece = pieces[i].currentSection.getCurrentPiece(); //To control when simulating
-			if (piece) {
-				var threatened = piece.getValidMovements(this.tableboard);
-				for (var j = 0; j < threatened.length; j++) {
-					if (threatened[j] == king) {
-						console.log("check");
-						return true;
-					} 
-				}
-			}
-		}
-		return false;
+		return this.tableboard.isInCheck(this.currentTurn);
 	}
 
   	isCheckMate() {

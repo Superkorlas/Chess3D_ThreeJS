@@ -85,7 +85,7 @@ class Piece extends THREE.Object3D {
         }
     }
 
-    select(isThreatened) {
+    select(isThreatened = false) {
         if (isThreatened) {
 			this.mesh.material = this.threatenMaterial;
         } else {

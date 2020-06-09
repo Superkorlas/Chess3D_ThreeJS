@@ -60,23 +60,23 @@ class Tableboard extends THREE.Object3D {
 		this.blackTeam.push(this.blackKing);
 		
         this.whiteTeam.push(new Rook(teams.WHITE, this.sections[0][0]));  
-        this.blackTeam.push(new Rook(teams.BLACK, this.sections[0][7]));  
+        this.blackTeam.push(new Rook(teams.BLACK, this.sections[0][7]));/*  
         this.whiteTeam.push(new Knight(teams.WHITE, this.sections[1][0]));
         this.blackTeam.push(new Knight(teams.BLACK, this.sections[1][7]));
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[2][0]));
-        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7]));  
+        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7]));*/  
         this.whiteTeam.push(new Queen(teams.WHITE, this.sections[4][0])); 
-        this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7])); 
+        this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7]));/* 
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[5][0]));
         this.blackTeam.push(new Bishop(teams.BLACK, this.sections[5][7]));
         this.whiteTeam.push(new Knight(teams.WHITE, this.sections[6][0]));
-        this.blackTeam.push(new Knight(teams.BLACK, this.sections[6][7]));
+        this.blackTeam.push(new Knight(teams.BLACK, this.sections[6][7]));*/
         this.whiteTeam.push(new Rook(teams.WHITE, this.sections[7][0]));  
 		this.blackTeam.push(new Rook(teams.BLACK, this.sections[7][7]));  
 
         for (var i = 0; i < this.boardSize; i++) {
-            this.whiteTeam.push(new Pawn(teams.WHITE, this.sections[i][1], this.octree));
-            this.blackTeam.push(new Pawn(teams.BLACK, this.sections[i][6], this.octree));
+            //this.whiteTeam.push(new Pawn(teams.WHITE, this.sections[i][1], this.octree));
+            //this.blackTeam.push(new Pawn(teams.BLACK, this.sections[i][6], this.octree));
         }
 
         for (var i = 0; i < this.whiteTeam.length; i++) {
@@ -193,5 +193,31 @@ class Tableboard extends THREE.Object3D {
 		}
 
 		this.addPieces();
+	}
+
+	isInCheck(teamTurn) {
+		var pieces = new Array();
+		var king = null;
+		if (teamTurn == teams.WHITE) {
+			pieces = this.blackTeam;
+			king = this.whiteKing;
+		} else {
+			pieces = this.whiteTeam;
+			king = this.blackKing;
+		}
+
+		for (var i = 0; i < pieces.length; i++) {
+			var piece = pieces[i].currentSection.getCurrentPiece();
+			if (piece) {
+				var threatened = piece.getValidMovements(this);
+				for (var j = 0; j < threatened.length; j++) {
+					if (threatened[j] == king) {
+						console.log("check");
+						return true;
+					} 
+				}
+			}
+		}
+		return false;
 	}
 }
