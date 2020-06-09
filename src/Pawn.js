@@ -2,7 +2,6 @@ class Pawn extends Piece {
     constructor(team, initialSection) {
         super("Pawn", team, initialSection);
 
-        this.transformed = false;
         this.transformationLocation;
         if (this.team == teams.WHITE) {
             this.transformationLocation = 7;
@@ -43,25 +42,6 @@ class Pawn extends Piece {
             validMovements.push(nextSection.getCurrentPiece());
         }
 
-        /*
-        if (nextSection) {
-            sectionPiece = nextSection.getCurrentPiece();
-            if (sectionPiece != null) {
-                if (this.team != sectionPiece.team) {
-                    validMovements.push(sectionPiece);
-                }
-            }
-        }
-
-        nextSection = tableboard.getSection(x - 1 * direction, z + 1 * direction);
-        if (nextSection) {
-            if (nextSection.currentPiece != null) {
-                if (this.team != nextSection.currentPiece.team) {
-                    validMovements.push(nextSection.currentPiece);
-                }
-            }
-        }*/
-
         return validMovements;
     }
 
@@ -89,11 +69,10 @@ class Pawn extends Piece {
     }
 
     onMovementComplete() {
-        super.onMovementComplete();
-        if (!this.transformed && this.currentSection.posZ == this.transformationLocation) {
-            this.parent.parent.transformPawn(this);
-			this.transformed = true;
+        if (this.currentSection.posZ == this.transformationLocation) {
 			document.dispatchEvent(new Event("TransformPawn"));
-        }
+        } else {
+			super.onMovementComplete();
+		}
     }
 }

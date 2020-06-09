@@ -55,16 +55,16 @@ class Tableboard extends THREE.Object3D {
 		this.blackTeam = new Array();
 
         this.whiteKing = new King(teams.WHITE, this.sections[3][0]);
-        this.blackKing = new King(teams.BLACK, this.sections[3][7]);
-
+		this.blackKing = new King(teams.BLACK, this.sections[3][7]);
+		this.whiteTeam.push(this.whiteKing);  
+		this.blackTeam.push(this.blackKing);
+		
         this.whiteTeam.push(new Rook(teams.WHITE, this.sections[0][0]));  
         this.blackTeam.push(new Rook(teams.BLACK, this.sections[0][7]));  
         this.whiteTeam.push(new Knight(teams.WHITE, this.sections[1][0]));
         this.blackTeam.push(new Knight(teams.BLACK, this.sections[1][7]));
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[2][0]));
-        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7]));
-        this.whiteTeam.push(this.whiteKing);  
-        this.blackTeam.push(this.blackKing);  
+        this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7]));  
         this.whiteTeam.push(new Queen(teams.WHITE, this.sections[4][0])); 
         this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7])); 
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[5][0]));
@@ -72,7 +72,7 @@ class Tableboard extends THREE.Object3D {
         this.whiteTeam.push(new Knight(teams.WHITE, this.sections[6][0]));
         this.blackTeam.push(new Knight(teams.BLACK, this.sections[6][7]));
         this.whiteTeam.push(new Rook(teams.WHITE, this.sections[7][0]));  
-        this.blackTeam.push(new Rook(teams.BLACK, this.sections[7][7]));  
+		this.blackTeam.push(new Rook(teams.BLACK, this.sections[7][7]));  
 
         for (var i = 0; i < this.boardSize; i++) {
             this.whiteTeam.push(new Pawn(teams.WHITE, this.sections[i][1], this.octree));
@@ -105,18 +105,26 @@ class Tableboard extends THREE.Object3D {
         var team = pawn.team;
         var newPiece;
 
-        this.destroyPiece(pawn);
-        
-        if (newType == "Queen") {
-            newPiece = new Queen(team, section);
-        }
+		if (pawn instanceof Pawn) {
+			this.destroyPiece(pawn);
+			
+			if (newType == "Queen") {
+				newPiece = new Queen(team, section);
+			} else if (newType == "Rook") {
+				newPiece = new Rook(team, section);
+			} else if (newType == "Knight") {
+				newPiece = new Knight(team, section);
+			} else if (newType == "Bishop") {
+				newPiece = new Bishop(team, section);
+			}
 
-        if (team == teams.WHITE) {
-            this.whiteTeam.push(newPiece);
-        } else {
-            this.blackTeam.push(newPiece);
-        }
-        this.board.add(newPiece);
+			if (team == teams.WHITE) {
+				this.whiteTeam.push(newPiece);
+			} else {
+				this.blackTeam.push(newPiece);
+			}
+			this.board.add(newPiece);
+		}
     }
 
     destroyPiece(piece) {

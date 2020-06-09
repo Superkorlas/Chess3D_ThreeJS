@@ -6,15 +6,18 @@ class GameMode {
 		this.pickableObjects = new Array();
 		this.currentTurn = teams.WHITE;
 		this.gameState = GameState.SELECT_PIECE;
-		this.isHelpActive = true;
 		this.currentValidMovements = new Array();
 		var that = this;
 
 		document.addEventListener("pieceMovementFinished",  (event) => this.rotateTableboard());
 		document.addEventListener("tableboardRotationFinished", (event) => this.nextTurn());
-		document.addEventListener("", (event) => this.onTransformPawn());
+		document.addEventListener("TransformPawn", (event) => this.onTransformPawn());
 		window.addEventListener("mousedown", (event) => this.onMouseDown(event));
 		document.getElementById("newMatchButton").onclick = function() { that.newMatch()};
+		document.getElementById("queenOption").onclick = function() {that.onTransformOptionSelected("Queen");};
+		document.getElementById("rookOption").onclick = function() {that.onTransformOptionSelected("Rook");};
+		document.getElementById("knightOption").onclick = function() {that.onTransformOptionSelected("Knight");};
+		document.getElementById("bishopOption").onclick = function() {that.onTransformOptionSelected("Bishop");};
 	}
 	
 	newMatch() {
@@ -123,6 +126,7 @@ class GameMode {
 	}
 
 	rotateTableboard() {
+		this.setGameState(GameState.ANIMATION_RUNNING);
 		this.tableboard.changePlayer();
 	}
 
@@ -131,25 +135,21 @@ class GameMode {
 	}
 
 	markSections() {
-		if (this.isHelpActive) {
-			for(var i = 0; i < this.currentValidMovements.length; i++) {
-				if (this.currentValidMovements[i] instanceof Piece) {
-					this.currentValidMovements[i].select(true);
-				} else {
-					this.currentValidMovements[i].select();
-				}
+		for(var i = 0; i < this.currentValidMovements.length; i++) {
+			if (this.currentValidMovements[i] instanceof Piece) {
+				this.currentValidMovements[i].select(true);
+			} else {
+				this.currentValidMovements[i].select();
 			}
 		}
 	}
 
 	unmarkSections() {
-		if (this.isHelpActive) {
-			for(var i = 0; i < this.currentValidMovements.length; i++) {
-				if (this.currentValidMovements[i].currentPiece != null) {
-					this.currentValidMovements[i].currentPiece.unselect(true);
-				} else {
-					this.currentValidMovements[i].unselect();
-				}
+		for(var i = 0; i < this.currentValidMovements.length; i++) {
+			if (this.currentValidMovements[i].currentPiece != null) {
+				this.currentValidMovements[i].currentPiece.unselect(true);
+			} else {
+				this.currentValidMovements[i].unselect();
 			}
 		}
 	}
@@ -249,6 +249,13 @@ class GameMode {
 
 	onTransformPawn() {
 		this.setGameState(GameState.TRANSFORMING_PAWN);
+		document.getElementById("transformPawn").style.display = "block";
+	}
+
+	onTransformOptionSelected(name) {
+		document.getElementById("transformPawn").style.display = "none";
+		this.tableboard.transformPawn(this.currentSelected, name);
+		this.rotateTableboard();
 	}
 
 	sendMessage(text) {
