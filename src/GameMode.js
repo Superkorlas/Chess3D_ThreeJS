@@ -5,7 +5,7 @@ class GameMode {
 		this.currentSelected = null;
 		this.pickableObjects = new Array();
 		this.currentTurn = teams.WHITE;
-		this.gameState = GameState.SELECT_PIECE;
+		this.gameState =GameState.SELECT_PIECE;
 		this.currentValidMovements = new Array();
 		var that = this;
 
@@ -21,7 +21,7 @@ class GameMode {
 	}
 	
 	newMatch() {
-		if (this.gameState != GameState.ANIMATION_RUNNING) {
+		if (MyScene.ready && this.gameState != GameState.ANIMATION_RUNNING) {
 			this.tableboard.newMatch();
 			if (this.currentTurn == teams.BLACK) {
 				this.rotateTableboard();
@@ -176,11 +176,9 @@ class GameMode {
 
 		if (this.isInCheck()) {
 			if (!this.isCheckMate()) {
-				alert("Check!");
 				MyScene.addToMessage("Be careful! Your king is threatened!");
 			} else {
 				this.setGameState(GameState.CHECK_MATE);
-				alert("Checkmate!! You loose");
 			}
 			currentKing.check();
 		}
@@ -225,9 +223,9 @@ class GameMode {
 				break;
 			case GameState.CHECK_MATE:
 				this.sendMessage("You loose!");
-				//TODO: button to other match??
 				break;
 			case GameState.TRANSFORMING_PAWN:
+				this.sendMessage("Choose the promotion option.");
 				break;
 		}
 	}

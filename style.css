@@ -26,9 +26,9 @@ body {
 	position: fixed;
 	z-index: 1;
 	left: 25%;
-	top: 25%;
+	top: 15%;
 	width: 50%;
-	height: 50%;
+	height: 70%;
 	overflow: auto;
 	background-color: rgba(183, 160, 233, 0.8);
 }

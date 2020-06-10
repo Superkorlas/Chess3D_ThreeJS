@@ -275,7 +275,4 @@ class Piece extends THREE.Object3D {
         this.parent.remove(this);
     }
 
-    update() {    
-    }
-
 }

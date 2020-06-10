@@ -6,7 +6,6 @@ class MyScene extends THREE.Scene {
 		this.gui = this.createGUI ();        
 		this.createLights ();
 		this.createCamera ();
-		this.lastTime = Date.now();
 		this.tableboard = new Tableboard();
 		this.add(this.tableboard);
 		this.gameMode = new GameMode(this.tableboard, this.camera);
@@ -27,8 +26,7 @@ class MyScene extends THREE.Scene {
 
 		if (MyScene.piecesLoaded >= MyScene.totalPieces && !MyScene.ready) {
 			MyScene.ready = true;
-			this.lastTime = Date.now();
-			MyScene.setMessage("Play!");
+			
 		}
 	}
 
@@ -102,19 +100,15 @@ class MyScene extends THREE.Scene {
   }
 
   update() {
-    var currentTime = Date.now();
-    var deltaTime = (currentTime - this.lastTime) / 1000;
-    this.lastTime = currentTime;
-
     requestAnimationFrame(() => this.update())
 
     if(MyScene.ready) {
-      this.tableboard.update(deltaTime);
-	  TWEEN.update();
-	  if (!this.started) {
-		document.dispatchEvent(new Event("Play"));
-		this.started = true;
-	  }
+		TWEEN.update();
+		if (!this.started) {
+			document.dispatchEvent(new Event("Play"));
+			this.started = true;
+			this.gameMode.setGameState(GameState.SELECT_PIECE);
+		}
     }
     
     this.renderer.render (this, this.getCamera());
