@@ -4,7 +4,6 @@ const blackSectionColor = 0x804000;
 class Tableboard extends THREE.Object3D {
     constructor() {
         super();
-        this.rotateSpeed = 60;
         this.boardSize = 8;
         this.sections = [];
         this.whiteTeam = new Array();
@@ -146,7 +145,7 @@ class Tableboard extends THREE.Object3D {
         }
     }
 
-    changePlayer() {
+    changePlayerView() {
 		var that = this;
 		var current;
 		var newRot;

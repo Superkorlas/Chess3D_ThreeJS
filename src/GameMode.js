@@ -5,7 +5,7 @@ class GameMode {
 		this.currentSelected = null;
 		this.pickableObjects = new Array();
 		this.currentTurn = teams.WHITE;
-		this.gameState =GameState.SELECT_PIECE;
+		this.gameState = GameState.SELECT_PIECE;
 		this.currentValidMovements = new Array();
 		var that = this;
 
@@ -134,7 +134,7 @@ class GameMode {
 
 	rotateTableboard() {
 		this.setGameState(GameState.ANIMATION_RUNNING);
-		this.tableboard.changePlayer();
+		this.tableboard.changePlayerView();
 	}
 
 	destroyPiece(piece) {

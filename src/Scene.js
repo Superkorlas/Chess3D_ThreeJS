@@ -3,7 +3,6 @@ class MyScene extends THREE.Scene {
 		super();   
 		MyScene.setMessage("Loading: 0%"); 
 		this.renderer = this.createRenderer(myCanvas);   
-		this.gui = this.createGUI ();        
 		this.createLights ();
 		this.createCamera ();
 		this.tableboard = new Tableboard();
@@ -48,12 +47,7 @@ class MyScene extends THREE.Scene {
     this.camera.lookAt(look);
     this.add (this.camera);
   }
-  
-  createGUI () {
-    var gui = new dat.GUI();
-    return gui;
-  }
-  
+
   createLights () {
     var ambientLight = new THREE.AmbientLight(0xccddee, 0.35);
     this.add (ambientLight);

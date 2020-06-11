@@ -61,7 +61,6 @@ class Pawn extends Piece {
             if (sectionPiece != null) {
                 if (this.team != sectionPiece.team) {
                     return true;
-                    //validMovements.push(sectionPiece);
                 }
             }
         }
