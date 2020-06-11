@@ -181,6 +181,8 @@ class GameMode {
 				this.setGameState(GameState.CHECK_MATE);
 			}
 			currentKing.check();
+		} else if (!this.hasLegalMovements()) {
+			this.setGameState(GameState.DRAW);
 		}
 	}
 
@@ -189,6 +191,10 @@ class GameMode {
 	}
 
   	isCheckMate() {
+		return (!this.hasLegalMovements());
+	}
+
+	hasLegalMovements() {
 		var team;
 		if (this.currentTurn == teams.WHITE) {
 			team = this.tableboard.whiteTeam;
@@ -201,11 +207,11 @@ class GameMode {
 			this.currentValidMovements = team[i].getValidMovements(this.tableboard);
 			this.deleteInvalidForCheckMovements(team[i]);
 			if (this.currentValidMovements.length > 0) {
-				return false;
+				return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	setGameState(newState) {
@@ -226,6 +232,9 @@ class GameMode {
 				break;
 			case GameState.TRANSFORMING_PAWN:
 				this.sendMessage("Choose the promotion option.");
+				break;
+			case GameState.DRAW:
+				this.sendMessage("Draw because stalemate");
 				break;
 		}
 	}

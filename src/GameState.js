@@ -4,4 +4,5 @@ const GameState = {
 	ANIMATION_RUNNING: 3,
 	CHECK_MATE: 4,
 	TRANSFORMING_PAWN: 5,
+	DRAW: 6,
 }

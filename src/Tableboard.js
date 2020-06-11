@@ -130,7 +130,6 @@ class Tableboard extends THREE.Object3D {
     destroyPiece(piece) {
         if (piece) {
 			piece.destroy();
-			//piece.parent.remove(piece);
             if (piece.team == teams.WHITE) {
                 for (var i = 0; i < this.whiteTeam.length; i++) {
                     if (this.whiteTeam[i] == piece) {
