@@ -9,6 +9,7 @@ class MyScene extends THREE.Scene {
 		this.add(this.tableboard);
 		this.gameMode = new GameMode(this.tableboard, this.camera);
 		this.started = false;
+		loadModels();
 	}
 
 	static pieceLoaded() {

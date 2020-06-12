@@ -70,9 +70,11 @@ function loadPiece(name) {
 	);
 }
 
-loadPiece("Pawn");
-loadPiece("King");
-loadPiece("Queen");
-loadPiece("Bishop");
-loadPiece("Knight");
-loadPiece("Rook");
+function loadModels() {
+	loadPiece("Pawn");
+	loadPiece("King");
+	loadPiece("Queen");
+	loadPiece("Bishop");
+	loadPiece("Knight");
+	loadPiece("Rook");
+}
