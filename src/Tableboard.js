@@ -53,8 +53,8 @@ class Tableboard extends THREE.Object3D {
 		this.whiteTeam = new Array();
 		this.blackTeam = new Array();
 
-        this.whiteKing = new King(teams.WHITE, this.sections[3][0]);
-		this.blackKing = new King(teams.BLACK, this.sections[3][7]);
+        this.whiteKing = new King(teams.WHITE, this.sections[4][0]);
+		this.blackKing = new King(teams.BLACK, this.sections[4][7]);
 		this.whiteTeam.push(this.whiteKing);  
 		this.blackTeam.push(this.blackKing);
 		
@@ -64,8 +64,8 @@ class Tableboard extends THREE.Object3D {
         this.blackTeam.push(new Knight(teams.BLACK, this.sections[1][7]));
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[2][0]));
         this.blackTeam.push(new Bishop(teams.BLACK, this.sections[2][7])); 
-        this.whiteTeam.push(new Queen(teams.WHITE, this.sections[4][0])); 
-        this.blackTeam.push(new Queen(teams.BLACK, this.sections[4][7]));
+        this.whiteTeam.push(new Queen(teams.WHITE, this.sections[3][0])); 
+        this.blackTeam.push(new Queen(teams.BLACK, this.sections[3][7]));
         this.whiteTeam.push(new Bishop(teams.WHITE, this.sections[5][0]));
         this.blackTeam.push(new Bishop(teams.BLACK, this.sections[5][7]));
         this.whiteTeam.push(new Knight(teams.WHITE, this.sections[6][0]));
