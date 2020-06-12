@@ -14,11 +14,11 @@ class Piece extends THREE.Object3D {
 		this.texture;
         switch (team) {
             case teams.WHITE:
-                this.texture = new THREE.TextureLoader().load("../assets/textures/white_piece.jpg");
+                this.texture = whitePieceTexture;
                 break;
             case teams.BLACK:
-				this.texture = new THREE.TextureLoader().load("../assets/textures/black_piece.jpg");
-				break;                break;
+				this.texture = blackPieceTexture;
+				break;
             default:
                 window.alert("Not valid team for " + this.name);
                 break;

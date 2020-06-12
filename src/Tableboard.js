@@ -23,7 +23,7 @@ class Tableboard extends THREE.Object3D {
 		var geometry = new THREE.TorusGeometry( 151, 10, 4, 4 );
 		geometry.rotateX(90*Math.PI / 180);
 		geometry.rotateY(45*Math.PI / 180);
-		var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: new THREE.TextureLoader().load("../assets/textures/white_section.jpg") } );
+		var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: whiteSectionTexture } );
 		var border = new THREE.Mesh( geometry, material );
 		this.add( border );
     }

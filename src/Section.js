@@ -12,9 +12,9 @@ class Section extends THREE.Object3D {
 
 		this.texture;
 		if (color == blackSectionColor) {
-			this.texture =  new THREE.TextureLoader().load("../assets/textures/white_section.jpg");
+			this.texture =  whiteSectionTexture;
 		} else {
-			this.texture = new THREE.TextureLoader().load("../assets/textures/white_section.jpg");
+			this.texture = blackSectionTexture;
 		}
 
 		this.material = new THREE.MeshPhongMaterial({ color: this.color, map : this.texture });
