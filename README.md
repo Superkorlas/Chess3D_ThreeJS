@@ -1,1 +1,1 @@
-# Chess3D_ThreeJS
+# University Project - Chess3D with Three.js
