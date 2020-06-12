@@ -29,7 +29,7 @@ class Tableboard extends THREE.Object3D {
     }
 
     createBoard() {
-        var color = blackSectionColor;
+        var color = whiteSectionColor;
         for (var i = 0; i < this.boardSize; i++) {
             if (color === whiteSectionColor) {
                 color = blackSectionColor;
