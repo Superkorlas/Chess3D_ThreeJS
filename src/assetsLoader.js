@@ -4,11 +4,11 @@ var queenModel;
 var bishopModel;
 var knightModel;
 var rookModel;
-var whiteSectionTexture = new THREE.TextureLoader().load("Chess3D_ThreeJS/assets/textures/white_section.jpg");
-var blackSectionTexture = new THREE.TextureLoader().load("Chess3D_ThreeJS/assets/textures/white_section.jpg");
-var whitePieceTexture = new THREE.TextureLoader().load("Chess3D_ThreeJS/assets/textures/white_piece.jpg");
-var blackPieceTexture = new THREE.TextureLoader().load("Chess3D_ThreeJS/assets/textures/black_piece.jpg");
-var piecesModelPath = "Chess3D_ThreeJS/assets/model/";
+var whiteSectionTexture = new THREE.TextureLoader().load("../Chess3D_ThreeJS/assets/textures/white_section.jpg");
+var blackSectionTexture = new THREE.TextureLoader().load("../Chess3D_ThreeJS/assets/textures/white_section.jpg");
+var whitePieceTexture = new THREE.TextureLoader().load("../Chess3D_ThreeJS/assets/textures/white_piece.jpg");
+var blackPieceTexture = new THREE.TextureLoader().load("../Chess3D_ThreeJS/assets/textures/black_piece.jpg");
+var piecesModelPath = "../Chess3D_ThreeJSv/assets/model/";
 
 function getModel(name) {
 	switch(name) {
